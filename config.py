@@ -9,6 +9,9 @@ NUM_TILES_WIDTH = 10
 NUM_LEDS_PER_STRIP = 140
 """The number of RGB LEDS on each strip."""
 
+CLAMP = 254
+"""Numbers sent in the message that are over CLAMP have special meanings."""
+
 SERIAL_RATE = 460800
 #TODO(wchill): write docstring for this.
 

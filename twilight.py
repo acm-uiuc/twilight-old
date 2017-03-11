@@ -39,7 +39,8 @@ class Twilight:
 
         Args:
             unit_id: The id of the Twilight unit you want to write to.
-            colors: List of len 140 containing 3 Tuple of 0-255 rgb values.
+            colors: List of len 140 containing 3 Tuple of 0-254 rgb values.
+                Numbers higher than 254 will be treated as 254.
         """
         if len(colors) != NUM_LEDS_PER_STRIP:
             # TODO: raise a more meaningful exception.
@@ -50,6 +51,10 @@ class Twilight:
         # Colors are input as RGB. However, our LEDs take RBG :/
 
         serialized_colors = list(sum(rbg_colors, ()))
+        if (0xff in serialized_colors):
+            print("Color exceded 254.")
+            serialized_colors = [min(CLAMP, c) for c in serialized_colors]
+
         message = b'\xFF' + bytes(serialized_colors)
 
         if self.debug_mode:
