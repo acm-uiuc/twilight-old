@@ -12,6 +12,8 @@ NUM_LEDS_PER_STRIP = 140
 SERIAL_RATE = 460800
 #TODO(wchill): write docstring for this.
 
+DEBUG_MODE = True
+
 UNITS = [
     ((5, 2), "a", '/dev/ttyACM0'),
     ((5, 6), "b", '/dev/ttyACM1'),

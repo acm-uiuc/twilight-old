@@ -6,31 +6,42 @@ import serial
 class Twilight:
     """Interface for writing to Twilight"""
 
-    def __init__(self, debug_mode = True):
+    def __init__(self):
         """Creates a Twilight object based on the configurations in config.py.
         """
         self.tile_matrix = [[None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
-        self.serial_fds = {}
+        self.id_to_fd = {}
+        self.debug_mode = DEBUG_MODE
+
         for unit in UNITS:
             self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
-            if not debug_mode:
-                self.serial_fds[unit[1]] = serial.Serial(unit[2], SERIAL_RATE)
-            if debug_mode:
+            if not self.debug_mode:
+                self.id_to_fd[unit[1]] = serial.Serial(unit[2], SERIAL_RATE)
+            if self.debug_mode:
                 # TODO: Create a visualizer and write to that visualizer.
                 pass
 
-
     def __repr__(self):
         """Returns a string representation of the layout of Twilight."""
-        result = ""
+        result = ''
         for row in self.tile_matrix:
             for tile in row:
                 if tile is None:
-                    result += "_ "
+                    result += '_ '
                 else:
-                    result += tile + " "
-            result += "\n"
+                    result += tile + ' '
+            result += '\n'
         return result
+
+    def get_unit_id(self, position):
+        """Takes a (North-South, East-West) position and returns the id of the
+        twilight unit at that location. Returns None if there is no unit there.
+        """
+        return self.tile_matrix[position[0]][position[1]]
+
+    def get_all_unit_ids(self):
+        """Returns a list of all twilight unit ids."""
+        return [unit[1] for unit in UNITS]
 
     def write_to_unit(self, unit_id, colors):
         """Write colors to a Twilight unit's LED strip.
@@ -38,17 +49,34 @@ class Twilight:
 
         Args:
             unit_id: The id of the Twilight unit you want to write to.
-            colors: A 140 length list of 3-tuples for colors.
+            colors: List of len 140 containing 3 Tuple of 0-255 rgb values.
         """
-
         if len(colors) != NUM_LEDS_PER_STRIP:
             # TODO: raise a more meaningful exception.
             # TODO: review this 140 number.
             raise Exception("len(colors) != 140.")
 
+        serialized_colors = list(sum(colors, ()))
+        message = b'\xFF' + bytes(serialized_colors)
+
+        if self.debug_mode:
+            # TODO: pass values to visualizer
+            print("Debug mode not implemented. Returning.")
+            return message
+
         print("writing to serial")
+        self.id_to_fd[unit_id].write(message)
+
+    def set_unit_color(self, unit_id, rgb):
+        """Set all LEDS in a given unit to a specific color.
+
+        Args:
+            unit_id: The id of the Twilight unit you want to write to.
+            colors: 3 Tuple containing 0-255 values for rgb color.
+        """
+
+        self.write_to_unit(unit_id, [rgb]*140)
 
 
-
-matrix = Twilight()
-print(matrix)
+interface = Twilight()
+print(interface)

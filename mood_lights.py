@@ -1,10 +1,9 @@
 import time
 import colorsys
-import serial
+import twilight
 
-sp1 = serial.Serial('/dev/ttyACM0', 460800)
-sp2 = serial.Serial('/dev/ttyACM1', 460800)
-sp3 = serial.Serial('/dev/ttyACM4', 460800)
+system = twilight.Twilight()
+unit_ids = system.get_all_unit_ids()
 
 hue = 0.0
 
@@ -30,8 +29,7 @@ while True:
     elif blue < 0:
         blue = 0
 
-    sp1.write(b'\xFF' + bytes(list(sum([(red, green, blue)] * 140, ()))))
-    sp2.write(b'\xFF' + bytes(list(sum([(red, green, blue)] * 140, ()))))
-    sp3.write(b'\xFF' + bytes(list(sum([(red, green, blue)] * 140, ()))))
-
+    for unit_id in unit_ids:
+        system.set_unit_color(unit_id, (red, green, blue))
+        
     time.sleep(0.1)
