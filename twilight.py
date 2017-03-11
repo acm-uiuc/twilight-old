@@ -46,7 +46,10 @@ class Twilight:
             # TODO: review this 140 number.
             raise Exception("len(colors) != 140.")
 
-        serialized_colors = list(sum(colors, ()))
+        rbg_colors = [(col[0], col[2], col[1]) for col in colors]
+        # Colors are input as RGB. However, our LEDs take RBG :/
+
+        serialized_colors = list(sum(rbg_colors, ()))
         message = b'\xFF' + bytes(serialized_colors)
 
         if self.debug_mode:
@@ -66,13 +69,17 @@ class Twilight:
 
         self.write_to_unit(unit_id, [rgb]*140)
 
+
 interface = Twilight()
+"""This is your interface to Twilight."""
+
 
 def get_unit_id(position):
     """Takes a (North-South, East-West) position and returns the id of the
     twilight unit at that location. Returns None if there is no unit there.
     """
-    return interface.tile_matrix[position[0]][position[1]]
+    return interface.tile_matrix[position[1]][position[0]]
+
 
 def get_all_unit_ids():
     """Returns a list of all twilight unit ids."""

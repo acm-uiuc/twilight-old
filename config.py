@@ -15,7 +15,7 @@ SERIAL_RATE = 460800
 DEBUG_MODE = True
 
 UNITS = [
-    ((5, 6), "a", '/dev/ttyACM1'),
-    ((9, 6), "b", '/dev/ttyACM4'),
+    ((9, 6), "a", '/dev/ttyACM4'),
+    ((5, 6), "b", '/dev/ttyACM1'),
     ((5, 2), "c", '/dev/ttyACM0'),
 ]
