@@ -10,7 +10,9 @@ NUM_LEDS_PER_STRIP = 140
 """The number of RGB LEDS on each strip."""
 
 CLAMP = 254
-"""Numbers sent in the message that are over CLAMP have special meanings."""
+"""255, or 0xFF is being used a sentinel value in message strings sent to the
+controllers. CLAMP then, represents the highest value that should be sent as
+part of a color message."""
 
 SERIAL_RATE = 460800
 #TODO(wchill): write docstring for this.
