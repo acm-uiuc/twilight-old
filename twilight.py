@@ -54,7 +54,6 @@ class Twilight:
             print("Debug mode not implemented. Returning.")
             return message
 
-        print("writing to serial")
         self.id_to_fd[unit_id].write(message)
 
     def set_unit_color(self, unit_id, rgb):
