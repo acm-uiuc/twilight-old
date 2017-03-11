@@ -33,16 +33,6 @@ class Twilight:
             result += '\n'
         return result
 
-    def get_unit_id(self, position):
-        """Takes a (North-South, East-West) position and returns the id of the
-        twilight unit at that location. Returns None if there is no unit there.
-        """
-        return self.tile_matrix[position[0]][position[1]]
-
-    def get_all_unit_ids(self):
-        """Returns a list of all twilight unit ids."""
-        return [unit[1] for unit in UNITS]
-
     def write_to_unit(self, unit_id, colors):
         """Write colors to a Twilight unit's LED strip.
         This function lets you set each individual LED in the unit.
@@ -77,6 +67,16 @@ class Twilight:
 
         self.write_to_unit(unit_id, [rgb]*140)
 
-
 interface = Twilight()
+
+def get_unit_id(position):
+    """Takes a (North-South, East-West) position and returns the id of the
+    twilight unit at that location. Returns None if there is no unit there.
+    """
+    return interface.tile_matrix[position[0]][position[1]]
+
+def get_all_unit_ids():
+    """Returns a list of all twilight unit ids."""
+    return [unit[1] for unit in UNITS]
+
 print(interface)

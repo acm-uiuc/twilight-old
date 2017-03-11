@@ -2,8 +2,7 @@ import time
 import colorsys
 import twilight
 
-system = twilight.Twilight()
-unit_ids = system.get_all_unit_ids()
+unit_ids = twilight.get_all_unit_ids()
 
 hue = 0.0
 
@@ -30,6 +29,6 @@ while True:
         blue = 0
 
     for unit_id in unit_ids:
-        system.set_unit_color(unit_id, (red, green, blue))
-        
+        twilight.interface.set_unit_color(unit_id, (red, green, blue))
+
     time.sleep(0.1)
