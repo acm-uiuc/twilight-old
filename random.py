@@ -1,7 +1,7 @@
 import time
 import colorsys
 import twilight
-from random import randit
+from random import randint
 
 unit_ids = twilight.get_all_unit_ids()
 
