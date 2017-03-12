@@ -1,7 +1,7 @@
 
 import collections
-import serial
 import time
+import serial
 from config import *
 
 
@@ -53,15 +53,6 @@ class Twilight:
 
         self.rate_limit_dict[unit_id] = current_time_ms
         return False
-
-    def set_should_safety_block_state(self, state):
-        """Set whether your preference for the rate limiting behavior. Setting
-        this to TRUE will cause writes to sleep the minimum safety time.
-        Setting it to FALSE will cause writes to return immediately without
-        doing anything if safety time is violated.
-
-        False by default."""
-        self.should_safety_block = state
 
     def write_to_unit(self, unit_id, colors):
         """Write colors to a Twilight unit's LED strip.
@@ -125,5 +116,14 @@ def get_unit_id(position):
 def get_all_unit_ids():
     """Returns a list of all twilight unit ids."""
     return [unit[1] for unit in UNITS]
+
+def set_should_safety_block_state(state):
+    """Set whether your preference for the rate limiting behavior. Setting
+    this to TRUE will cause writes to sleep the minimum safety time.
+    Setting it to FALSE will cause writes to return immediately without
+    doing anything if safety time is violated.
+
+    False by default."""
+    interface.should_safety_block = state
 
 print(interface)
