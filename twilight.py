@@ -1,6 +1,8 @@
 
-from config import *
+import collections
 import serial
+import time
+from config import *
 
 
 class Twilight:
@@ -9,9 +11,12 @@ class Twilight:
     def __init__(self):
         """Creates a Twilight object based on the configurations in config.py.
         """
-        self.tile_matrix = [[None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
+        self.tile_matrix = [
+            [None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
         self.id_to_fd = {}
-        self.debug_mode = DEBUG_MODE
+        self.rate_limit_dict = collections.defaultdict(int)
+        self.debug_mode = DEBUG_MODE #TODO: consider making this an enum.
+        self.should_safety_block = False
 
         for unit in UNITS:
             self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
@@ -33,9 +38,37 @@ class Twilight:
             result += '\n'
         return result
 
+    def write_time_unsafe(self, unit_id):
+        """Checks if a write to a twilight unit is unsafe based on how much
+        time has passed since the last write. Returns True if unsafe. Returns
+        False if safe. Also records this time for the next call.
+        """
+        current_time_ms = int(time.time()*1000)
+
+        if current_time_ms - self.rate_limit_dict[unit_id] < RATE_LIMIT_TIME:
+            if not self.should_safety_block:
+                return True
+            time.sleep(0.001 * RATE_LIMIT_TIME)
+            current_time_ms = int(time.time()*1000)
+
+        self.rate_limit_dict[unit_id] = current_time_ms
+        return False
+
+    def set_should_safety_block_state(self, state):
+        """Set whether your preference for the rate limiting behavior. Setting
+        this to TRUE will cause writes to sleep the minimum safety time.
+        Setting it to FALSE will cause writes to return immediately without
+        doing anything if safety time is violated.
+
+        False by default."""
+        self.should_safety_block = state
+
     def write_to_unit(self, unit_id, colors):
         """Write colors to a Twilight unit's LED strip.
-        This function lets you set each individual LED in the unit.
+        This function lets you set each individual LED in the unit. This
+        function also has a rate limitor that drops messages sent within
+        RATE_LIMIT_TIME (see config) seconds of each other. The rate limitor
+        can be set to blocking mode as well.
 
         Args:
             unit_id: The id of the Twilight unit you want to write to.
@@ -46,15 +79,17 @@ class Twilight:
             # TODO: raise a more meaningful exception.
             # TODO: review this 140 number.
             raise Exception("len(colors) != 140.")
+        if self.write_time_unsafe(unit_id):
+            return
 
-        rbg_colors = [(col[0], col[2], col[1]) for col in colors]
         # Colors are input as RGB. However, our LEDs take RBG :/
+        rbg_colors = [(col[0], col[2], col[1]) for col in colors]
 
+        # Build the message
         serialized_colors = list(sum(rbg_colors, ()))
-        if (0xff in serialized_colors):
+        if 0xff in serialized_colors:
             print("Color exceded 254.")
             serialized_colors = [min(CLAMP, c) for c in serialized_colors]
-
         message = b'\xFF' + bytes(serialized_colors)
 
         if self.debug_mode:
@@ -66,6 +101,7 @@ class Twilight:
 
     def set_unit_color(self, unit_id, rgb):
         """Set all LEDS in a given unit to a specific color.
+        See write_to_unit() docs for details on rate limiting behavior.
 
         Args:
             unit_id: The id of the Twilight unit you want to write to.

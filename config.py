@@ -14,6 +14,9 @@ CLAMP = 254
 controllers. CLAMP then, represents the highest value that should be sent as
 part of a color message."""
 
+RATE_LIMIT_TIME = 100
+"""Safe amount of time (milis) between consecutive writes to the same unit."""
+
 SERIAL_RATE = 460800
 #TODO(wchill): write docstring for this.
 
