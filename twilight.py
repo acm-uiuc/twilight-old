@@ -15,15 +15,15 @@ class Twilight:
             [None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
         self.id_to_fd = {}
         self.rate_limit_dict = collections.defaultdict(int)
-        self.debug_mode = DEBUG_MODE #TODO: consider making this an enum.
-        self.should_safety_block = False
+        self.debug_mode = DEBUG_MODE
+        self.should_safety_block = False  # TODO: consider making this an enum.
 
         for unit in UNITS:
             self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
             if not self.debug_mode:
                 self.id_to_fd[unit[1]] = serial.Serial(unit[2], SERIAL_RATE)
             if self.debug_mode:
-                # TODO: Create a visualizer and write to that visualizer.
+                # TODO: Write to visualizer.
                 pass
 
     def __repr__(self):
@@ -64,7 +64,7 @@ class Twilight:
         Args:
             unit_id: The id of the Twilight unit you want to write to.
             colors: List of len 140 containing 3 Tuple of 0-254 rgb values.
-                Numbers higher than 254 will be treated as 254.
+                All color inputs will be clipped to [0, 254]
         """
         if len(colors) != NUM_LEDS_PER_STRIP:
             # TODO: raise a more meaningful exception.
@@ -76,11 +76,9 @@ class Twilight:
         # Colors are input as RGB. However, our LEDs take RBG :/
         rbg_colors = [(col[0], col[2], col[1]) for col in colors]
 
-        # Build the message
+        # Build the message and make sure all values are between 0 and CLAMP
         serialized_colors = list(sum(rbg_colors, ()))
-        if 0xff in serialized_colors:
-            print("Color exceded 254.")
-            serialized_colors = [min(CLAMP, c) for c in serialized_colors]
+        serialized_colors = [max(0, min(CLAMP, c)) for c in serialized_colors]
         message = b'\xFF' + bytes(serialized_colors)
 
         if self.debug_mode:
@@ -96,10 +94,21 @@ class Twilight:
 
         Args:
             unit_id: The id of the Twilight unit you want to write to.
-            colors: 3 Tuple containing 0-255 values for rgb color.
+            rgb: 3 Tuple containing 0-255 values for rgb color.
         """
 
         self.write_to_unit(unit_id, [rgb]*140)
+
+    def set_all_unit_color(self, rgb):
+        """Sets all units to the same color.
+        See write_to_unit() docs for details on rate limiting behavior.
+
+        Args:
+            rgb: 3 Tuple containing 0-255 values for rgb color.
+        """
+        unit_ids = get_all_unit_ids()
+        for unit_id in unit_ids:
+            self.set_unit_color(unit_id, rgb)
 
 
 interface = Twilight()
@@ -116,6 +125,7 @@ def get_unit_id(position):
 def get_all_unit_ids():
     """Returns a list of all twilight unit ids."""
     return [unit[1] for unit in UNITS]
+
 
 def set_should_safety_block_state(state):
     """Set whether your preference for the rate limiting behavior. Setting
