@@ -1,11 +1,11 @@
 
 import collections
-import time
-import serial
-from config import *
-
-import threading
 import queue
+import time
+import threading
+import serial
+
+import config_loader
 
 
 class Twilight:
@@ -21,13 +21,14 @@ class Twilight:
         self.threads = {}
         self.rate_limit_dict = collections.defaultdict(int)
         self.debug_mode = DEBUG_MODE
-        self.should_safety_block = False  # TODO: consider making this an enum.
+        self.should_safety_block = False
 
         for unit in UNITS:
             self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
             if not self.debug_mode:
                 port = serial.Serial(unit[2], SERIAL_RATE)
                 unit_queue = queue.Queue()
+
                 self.id_to_fd[unit[1]] = port
                 self.id_to_queue[unit[1]] = unit_queue
                 self.threads[unit[1]] = threading.Thread(
@@ -37,8 +38,9 @@ class Twilight:
                 )
                 unit_queue.put(b'\xFF' + b'\x00x00x00' * NUM_LEDS_PER_STRIP)
                 self.threads[unit[1]].start()
+
             if self.debug_mode:
-                # TODO: Write to visualizer.
+                # TODO: Write a visualizer.
                 pass
 
     def update_lights_helper(self, unit_queue, port):
@@ -46,6 +48,7 @@ class Twilight:
         while True:
             lights = unit_queue.get()
             while not unit_queue.empty():
+                # Get most recent frame if there are extra frames.
                 lights = unit_queue.get()
             port.write(lights)
 
@@ -133,7 +136,7 @@ class Twilight:
         for unit_id in unit_ids:
             self.set_unit_color(unit_id, rgb)
 
-
+config_loader.load_config(globals())
 interface = Twilight()
 """This is your interface to Twilight."""
 

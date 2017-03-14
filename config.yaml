@@ -1,4 +1,6 @@
 
+# Configs for twilight.
+# Please keep this in sync with config_loader.py
 
 # The number of full tiles in the North-South span of the room
 NUM_TILES_LENGTH: 15
@@ -22,8 +24,8 @@ SERIAL_RATE: 460800
 
 DEBUG_MODE: true
 
-# Format 
-UNITS:
+# Details about Units.
+UNIT_DETAILS:
   a:
     position_ns: 9
     position_we: 6
