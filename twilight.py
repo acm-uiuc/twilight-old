@@ -4,6 +4,9 @@ import time
 import serial
 from config import *
 
+import threading
+import queue
+
 
 class Twilight:
     """Interface for writing to Twilight"""
@@ -14,6 +17,8 @@ class Twilight:
         self.tile_matrix = [
             [None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
         self.id_to_fd = {}
+        self.id_to_queue = {}
+        self.threads = {}
         self.rate_limit_dict = collections.defaultdict(int)
         self.debug_mode = DEBUG_MODE
         self.should_safety_block = False  # TODO: consider making this an enum.
@@ -21,10 +26,24 @@ class Twilight:
         for unit in UNITS:
             self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
             if not self.debug_mode:
-                self.id_to_fd[unit[1]] = serial.Serial(unit[2], SERIAL_RATE)
+                port = serial.Serial(unit[2], SERIAL_RATE)
+                unit_queue = queue.Queue()
+                self.id_to_fd[unit[1]] = port
+                self.id_to_queue[unit[1]] = unit_queue
+                self.threads[unit[1]] = threading.Thread(target=self.update_lights_helper, daemon=True, args=(unit_queue, port))
+                unit_queue.put(b'\xFF' + b'\x00x00x00' * NUM_LEDS_PER_STRIP)
+                self.threads[unit[1]].start()
             if self.debug_mode:
                 # TODO: Write to visualizer.
                 pass
+
+    def update_lights_helper(self, unit_queue, port):
+        # TODO: Move the rate limiter into this code
+        while True:
+            lights = unit_queue.get()
+            while not unit_queue.empty():
+                light = unit_queue.get()
+            port.write(lights)
 
     def __repr__(self):
         """Returns a string representation of the layout of Twilight."""
@@ -86,7 +105,7 @@ class Twilight:
             print("Debug mode not implemented. Returning.")
             return message
 
-        self.id_to_fd[unit_id].write(message)
+        self.id_to_queue[unit_id].put(message)
 
     def set_unit_color(self, unit_id, rgb):
         """Set all LEDS in a given unit to a specific color.

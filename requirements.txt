@@ -1,20 +1,5 @@
-PIL==1.1.7
-argparse==1.2.1
-backports.ssl-match-hostname==3.4.0.2
-distribute==0.6.24
-mcpi==0.1.1
-mutagen==1.31
-numpy==1.6.2
-pyalsaaudio==0.5
-pygame==1.9.1release
-pygobject==3.8.2
-pylru==1.0.9
-pyserial==2.5
-requests==2.8.1
-six==1.10.0
-socketIO-client==0.5.6
--e git+https://github.com/doceme/py-spidev.git@1c713aaaad1f611d675d9188d2d5a6401fbb8843#egg=spidev-dev
-virtualenv==1.7.1.2
-websocket-client==0.32.0
-wsgiref==0.1.2
-youtube-dl==2015.10.13
+appdirs==1.4.3
+packaging==16.8
+pyparsing==2.2.0
+pyserial=3.3
+six=1.10.0
