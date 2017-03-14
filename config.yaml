@@ -1,0 +1,38 @@
+
+
+# The number of full tiles in the North-South span of the room
+NUM_TILES_LENGTH: 15
+
+# The number of full tiles in the East-West span of the room
+NUM_TILES_WIDTH: 10
+
+# The number of RGB LEDS on each strip.
+NUM_LEDS_PER_STRIP: 140
+
+# 255, or 0xFF is being used a sentinel value in message strings sent to the
+# controllers. CLAMP then, represents the highest value that should be sent as
+# part of a color message.
+CLAMP: 254
+
+# Safe amount of time (milis) between consecutive writes to the same unit.
+RATE_LIMIT_TIME: 100
+
+# TODO(wchill): write docstring for this.
+SERIAL_RATE: 460800
+
+DEBUG_MODE: true
+
+# Format 
+UNITS:
+  a:
+    position_ns: 9
+    position_we: 6
+    serial_port: '/dev/ttyACM4'
+  b:
+    position_ns: 5
+    position_we: 6
+    serial_port: '/dev/ttyACM1'
+  c:
+    position_ns: 5
+    position_we: 2
+    serial_port: '/dev/ttyACM0'
