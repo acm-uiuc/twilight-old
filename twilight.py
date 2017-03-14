@@ -30,7 +30,11 @@ class Twilight:
                 unit_queue = queue.Queue()
                 self.id_to_fd[unit[1]] = port
                 self.id_to_queue[unit[1]] = unit_queue
-                self.threads[unit[1]] = threading.Thread(target=self.update_lights_helper, daemon=True, args=(unit_queue, port))
+                self.threads[unit[1]] = threading.Thread(
+                    target=self.update_lights_helper,
+                    daemon=True,
+                    args=(unit_queue, port)
+                )
                 unit_queue.put(b'\xFF' + b'\x00x00x00' * NUM_LEDS_PER_STRIP)
                 self.threads[unit[1]].start()
             if self.debug_mode:
@@ -42,7 +46,7 @@ class Twilight:
         while True:
             lights = unit_queue.get()
             while not unit_queue.empty():
-                light = unit_queue.get()
+                lights = unit_queue.get()
             port.write(lights)
 
     def __repr__(self):
@@ -154,5 +158,6 @@ def set_should_safety_block_state(state):
 
     False by default."""
     interface.should_safety_block = state
+
 
 print(interface)
