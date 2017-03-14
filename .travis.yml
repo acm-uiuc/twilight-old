@@ -1,0 +1,28 @@
+cache:
+    pip: true
+
+matrix:
+    include:
+      - os: linux
+        sudo: false
+        language: python
+        python: 3.4
+      - os: linux
+        sudo: false
+        language: python
+        python: 3.5
+      - os: linux
+        sudo: false
+        language: python
+        python: 3.6
+
+install:
+  - python -m pip install -r requirements.txt
+  - python -m pip install flake8
+
+script:
+  - python -m flake8
+
+branches:
+  only:
+    - master

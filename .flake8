@@ -1,0 +1,11 @@
+[flake8]
+max-line-length = 120
+count = True
+show-source = True
+statistics = True
+
+exclude =
+    .git,
+    __pycache__,
+    env,
+    *.pyc
