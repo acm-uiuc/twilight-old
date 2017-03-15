@@ -11,11 +11,6 @@ NUM_TILES_WIDTH: 10
 # The number of RGB LEDS on each strip.
 NUM_LEDS_PER_STRIP: 140
 
-# 255, or 0xFF is being used a sentinel value in message strings sent to the
-# controllers. CLAMP then, represents the highest value that should be sent as
-# part of a color message.
-CLAMP: 254
-
 # Safe amount of time (milis) between consecutive writes to the same unit.
 RATE_LIMIT_TIME: 100
 
@@ -29,7 +24,7 @@ UNITS:
   a:
     north_south: 9
     west_east: 6
-    serial_port: '/dev/ttyACM2'
+    serial_port: '/dev/ttyACM0'
   b:
     north_south: 5
     west_east: 6
@@ -37,4 +32,4 @@ UNITS:
   c:
     north_south: 5
     west_east: 2
-    serial_port: '/dev/ttyACM0'
+    serial_port: '/dev/ttyACM2'
