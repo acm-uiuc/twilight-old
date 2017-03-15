@@ -90,6 +90,7 @@ class Twilight:
                 port = serial.Serial(my_unit['serial_port'], config['SERIAL_RATE'])
                 unit_queue = queue.Queue()
 
+                # Set up the threads writing data to the serial port.
                 self.id_to_fd[unit] = port
                 self.id_to_queue[unit] = unit_queue
                 self.threads[unit] = threading.Thread(
@@ -97,6 +98,8 @@ class Twilight:
                     daemon=True,
                     args=(unit_queue, port)
                 )
+
+                # Turn off all the LEDs.
                 unit_queue.put(CMD_DISPLAY_FRAME + b'\x00x00x00' * config['NUM_LEDS_PER_STRIP'])
                 self.threads[unit].start()
 
@@ -104,15 +107,20 @@ class Twilight:
         # TODO: Move the rate limiter into this code
         while True:
             lights = unit_queue.get()
+
+            # Check for sentinel value and close serial port if needed.
             if lights is None:
                 port.close()
                 return
+
             while not unit_queue.empty():
                 # Get most recent frame if there are extra frames.
                 lights = unit_queue.get()
                 if lights is None:
                     port.close()
                     return
+
+            # Write the frame.
             port.write(lights)
 
     def __repr__(self):
@@ -158,7 +166,7 @@ class Twilight:
         if len(colors) != config['NUM_LEDS_PER_STRIP']:
             # TODO: raise a more meaningful exception.
             # TODO: review this 140 number.
-            raise Exception("len(colors) != 140.")
+            raise Exception("Got %d colors, expected %d." % (len(colors), config['NUM_LEDS_PER_STRIP']))
         if self.write_time_unsafe(unit_id):
             return
 

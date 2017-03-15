@@ -80,11 +80,21 @@ class PluginManager:
             current_time = time.time()
             next_module = self.getNextPlugin()
             if next_module and not next_module == current_module:
+                # Load the next plugin and give it the current panel layout
                 current_module = next_module
                 current_plugin = imp.load_source("__init__", next_module["path"]).plugin()
                 current_plugin.setTileMatrix(twilight.interface.tile_matrix)
+
             while time.time() < current_time + self.config["PLUGIN_CYCLE_LENGTH"]:
+                # Wait for the plugin to be ready
+                while not current_plugin.ready():
+                    time.sleep(0.01)
+                    pass
+
+                # Get and write the next frame
                 tile_matrix = current_plugin.getNextFrame()
                 for pixel in tile_matrix:
-                    twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
-                time.sleep(0.1)
+                    if type(tile_matrix[pixel]) is tuple:
+                        twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
+                    else:
+                        twilight.interface.write_to_unit(pixel, tile_matrix[pixel])

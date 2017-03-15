@@ -1,4 +1,5 @@
 import colorsys
+import time
 from plugin_base import Plugin
 
 
@@ -7,9 +8,10 @@ class MoodLightPlugin(Plugin):
     def __init__(self):
         Plugin.__init__(self)
         self.hue = 0.0
+        self.last_frame_time = 0
 
     def ready(self):
-        return True
+        return time.time() - self.last_frame_time > 0.1
 
     def getNextFrame(self):
         self.hue += 0.0025
@@ -22,6 +24,7 @@ class MoodLightPlugin(Plugin):
             for tile in row:
                 if tile is not None:
                     frame[tile["unit"]] = (red, green, blue)
+        self.last_frame_time = time.time()
         return frame
 
 
