@@ -1,11 +1,46 @@
-
 import collections
 import queue
 import time
 import threading
 import serial
 
-import config_loader
+from config_loader import config_loader
+
+"""The name of the YAML file from which to get configuration."""
+CONFIG_FILE_NAME = 'config.yml'
+
+
+default_config = {
+    # The number of full tiles in the North-South span of the room.
+    'NUM_TILES_LENGTH': 15,
+
+    # The number of full tiles in the East-West span of the room.
+    'NUM_TILES_WIDTH': 10,
+
+    # The number of RGB LEDS on each strip.
+    'NUM_LEDS_PER_STRIP': 140,
+
+    # 255, or 0xFF is being used as a sentinel value in message strings sent to the
+    # controllers. CLAMP then, represents the highest value that should be sent as
+    # part of a color message.
+    'CLAMP': 254,
+
+    # Safe amount of time (milis) between consecutive writes to the same unit.
+    'RATE_LIMIT_TIME': 10,
+
+    # The rate at which to write to the serial port (in bits per second).
+    'SERIAL_RATE': 460800,
+
+    # Enable debug mode.
+    'DEBUG_MODE': True,
+
+    # Information about Twilight panel units.
+    'UNITS': {}
+}
+
+
+config_loader.register_config('twilight', CONFIG_FILE_NAME, default_config)
+config = config_loader.load_config('twilight')
 
 
 class Twilight:
@@ -14,42 +49,63 @@ class Twilight:
     def __init__(self):
         """Creates a Twilight object based on the configurations in config.py.
         """
-        self.tile_matrix = [
-            [None] * NUM_TILES_WIDTH for i in range(NUM_TILES_LENGTH)]
         self.id_to_fd = {}
         self.id_to_queue = {}
         self.threads = {}
         self.rate_limit_dict = collections.defaultdict(int)
-        self.debug_mode = DEBUG_MODE
         self.should_safety_block = False
 
-        for unit in UNITS:
-            self.tile_matrix[unit[0][0]][unit[0][1]] = unit[1]
-            if not self.debug_mode:
-                port = serial.Serial(unit[2], SERIAL_RATE)
+        self.load_tile_matrix()
+
+        if config['DEBUG_MODE']:
+            # TODO: Write a visualizer.
+            pass
+
+    def load_tile_matrix(self):
+        # Close existing file descriptors and threads
+        for key in self.id_to_queue:
+            self.id_to_queue[key].put(None)
+
+        self.tile_matrix = [
+            [None] * config['NUM_TILES_WIDTH'] for i in range(config['NUM_TILES_LENGTH'])]
+
+        for unit in config['UNITS']:
+            north_south, west_east = config['UNITS'][unit]['north_south'], config['UNITS'][unit]['west_east']
+            my_unit = {
+                'unit': unit,
+                'position_ns': north_south,
+                'position_we': west_east,
+                'serial_port': config['UNITS'][unit]['serial_port']
+            }
+            self.tile_matrix[north_south][west_east] = my_unit
+
+            if not config['DEBUG_MODE']:
+                port = serial.Serial(my_unit['serial_port'], config['SERIAL_RATE'])
                 unit_queue = queue.Queue()
 
-                self.id_to_fd[unit[1]] = port
-                self.id_to_queue[unit[1]] = unit_queue
-                self.threads[unit[1]] = threading.Thread(
+                self.id_to_fd[unit] = port
+                self.id_to_queue[unit] = unit_queue
+                self.threads[unit] = threading.Thread(
                     target=self.update_lights_helper,
                     daemon=True,
                     args=(unit_queue, port)
                 )
-                unit_queue.put(b'\xFF' + b'\x00x00x00' * NUM_LEDS_PER_STRIP)
-                self.threads[unit[1]].start()
-
-            if self.debug_mode:
-                # TODO: Write a visualizer.
-                pass
+                unit_queue.put(b'\xFF' + b'\x00x00x00' * config['NUM_LEDS_PER_STRIP'])
+                self.threads[unit].start()
 
     def update_lights_helper(self, unit_queue, port):
         # TODO: Move the rate limiter into this code
         while True:
             lights = unit_queue.get()
+            if lights is None:
+                port.close()
+                return
             while not unit_queue.empty():
                 # Get most recent frame if there are extra frames.
                 lights = unit_queue.get()
+                if lights is None:
+                    port.close()
+                    return
             port.write(lights)
 
     def __repr__(self):
@@ -60,7 +116,7 @@ class Twilight:
                 if tile is None:
                     result += '_ '
                 else:
-                    result += tile + ' '
+                    result += tile['unit'] + ' '
             result += '\n'
         return result
 
@@ -71,10 +127,10 @@ class Twilight:
         """
         current_time_ms = int(time.time()*1000)
 
-        if current_time_ms - self.rate_limit_dict[unit_id] < RATE_LIMIT_TIME:
+        if current_time_ms - self.rate_limit_dict[unit_id] < config['RATE_LIMIT_TIME']:
             if not self.should_safety_block:
                 return True
-            time.sleep(0.001 * RATE_LIMIT_TIME)
+            time.sleep(0.001 * config['RATE_LIMIT_TIME'])
             current_time_ms = int(time.time()*1000)
 
         self.rate_limit_dict[unit_id] = current_time_ms
@@ -92,7 +148,7 @@ class Twilight:
             colors: List of len 140 containing 3 Tuple of 0-254 rgb values.
                 All color inputs will be clipped to [0, 254]
         """
-        if len(colors) != NUM_LEDS_PER_STRIP:
+        if len(colors) != config['NUM_LEDS_PER_STRIP']:
             # TODO: raise a more meaningful exception.
             # TODO: review this 140 number.
             raise Exception("len(colors) != 140.")
@@ -104,10 +160,10 @@ class Twilight:
 
         # Build the message and make sure all values are between 0 and CLAMP
         serialized_colors = list(sum(rbg_colors, ()))
-        serialized_colors = [max(0, min(CLAMP, c)) for c in serialized_colors]
+        serialized_colors = [max(0, min(config['CLAMP'], c)) for c in serialized_colors]
         message = b'\xFF' + bytes(serialized_colors)
 
-        if self.debug_mode:
+        if config['DEBUG_MODE']:
             # TODO: pass values to visualizer
             print("Debug mode not implemented. Returning.")
             return message
@@ -132,35 +188,32 @@ class Twilight:
         Args:
             rgb: 3 Tuple containing 0-255 values for rgb color.
         """
-        unit_ids = get_all_unit_ids()
+        unit_ids = self.get_all_unit_ids()
         for unit_id in unit_ids:
             self.set_unit_color(unit_id, rgb)
 
-config_loader.load_config(globals())
+    def get_unit_id(self, position):
+        """Takes a (North-South, East-West) position and returns the id of the
+        twilight unit at that location. Returns None if there is no unit there.
+        """
+        return self.tile_matrix[position[0]][position[1]]
+
+    def get_all_unit_ids(self):
+        """Returns a list of all twilight unit ids."""
+        return [unit for unit in config['UNITS']]
+
+    def set_should_safety_block_state(self, state):
+        """Set whether your preference for the rate limiting behavior. Setting
+        this to TRUE will cause writes to sleep the minimum safety time.
+        Setting it to FALSE will cause writes to return immediately without
+        doing anything if safety time is violated.
+
+        False by default."""
+        self.should_safety_block = state
+
+
 interface = Twilight()
 """This is your interface to Twilight."""
-
-
-def get_unit_id(position):
-    """Takes a (North-South, East-West) position and returns the id of the
-    twilight unit at that location. Returns None if there is no unit there.
-    """
-    return interface.tile_matrix[position[1]][position[0]]
-
-
-def get_all_unit_ids():
-    """Returns a list of all twilight unit ids."""
-    return [unit[1] for unit in UNITS]
-
-
-def set_should_safety_block_state(state):
-    """Set whether your preference for the rate limiting behavior. Setting
-    this to TRUE will cause writes to sleep the minimum safety time.
-    Setting it to FALSE will cause writes to return immediately without
-    doing anything if safety time is violated.
-
-    False by default."""
-    interface.should_safety_block = state
 
 
 print(interface)

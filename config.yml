@@ -22,19 +22,19 @@ RATE_LIMIT_TIME: 100
 # TODO(wchill): write docstring for this.
 SERIAL_RATE: 460800
 
-DEBUG_MODE: true
+DEBUG_MODE: false
 
 # Details about Units.
-UNIT_DETAILS:
+UNITS:
   a:
-    position_ns: 9
-    position_we: 6
-    serial_port: '/dev/ttyACM4'
+    north_south: 9
+    west_east: 6
+    serial_port: '/dev/ttyACM2'
   b:
-    position_ns: 5
-    position_we: 6
+    north_south: 5
+    west_east: 6
     serial_port: '/dev/ttyACM1'
   c:
-    position_ns: 5
-    position_we: 2
+    north_south: 5
+    west_east: 2
     serial_port: '/dev/ttyACM0'
