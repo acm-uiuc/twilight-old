@@ -1,16 +1,14 @@
 import random
+from plugin_base import Plugin
 
 
-class Plugin:
+class EpilepsyPlugin(Plugin):
 
     def __init__(self):
-        self.tile_matrix = []
+        Plugin.__init__(self)
 
     def ready(self):
         return True
-
-    def setTileMatrix(self, tile_matrix):
-        self.tile_matrix = tile_matrix
 
     def getNextFrame(self):
         """Returns a dict of the form unit_id:(r,g,b)"""

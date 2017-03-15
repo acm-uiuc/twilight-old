@@ -1,17 +1,15 @@
 import colorsys
+from plugin_base import Plugin
 
 
-class Plugin:
+class MoodLightPlugin(Plugin):
 
     def __init__(self):
+        Plugin.__init__(self)
         self.hue = 0.0
-        self.tile_matrix = []
 
     def ready(self):
         return True
-
-    def setTileMatrix(self, tile_matrix):
-        self.tile_matrix = tile_matrix
 
     def getNextFrame(self):
         self.hue += 0.0025
