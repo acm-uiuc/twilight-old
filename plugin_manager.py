@@ -1,6 +1,5 @@
 import imp
 import os
-import json
 import time
 import twilight
 from config_loader import config_loader
@@ -16,7 +15,6 @@ class PluginManager:
             # Plugin data, priority in range 0-9 inclusive, persistent is boolean
             'PLUGINS': {}
         }
-
 
         config_loader.register_config('plugin', PLUGIN_FILE_NAME, default_config)
         self.plugins = config_loader.load_config('plugin')
