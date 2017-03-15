@@ -52,7 +52,7 @@ class PluginManager:
                 "name": plugin_name,
                 "path": plugins[plugin_name]["path"],
                 "priority": plugins[plugin_name]["priority"],
-                "persistent": plugins[plugin_name]["persistent"]
+                "persistent": plugins[plugin_name]["persistent"],
             }
             self.blocked[plugin_name] = True
             for index in range(len(self.loaded_plugins)):
@@ -66,12 +66,10 @@ class PluginManager:
 
     def getNextPlugin(self):
         for plugin in self.loaded_plugins:
-            module = imp.load_source("__init__", plugin["path"])
-            if module.ready():
-                if not plugin["persistent"]:
-                    self.loaded_plugins.remove(plugin)
-                    del self.blocked[plugin["name"]]  # allow this plugin to be re-added
-                return module
+            if not plugin["persistent"]:
+                self.loaded_plugins.remove(plugin)
+                del self.blocked[plugin["name"]]  # allow this plugin to be re-added
+            return plugin
         return None
 
     def start(self):
@@ -83,17 +81,10 @@ class PluginManager:
             next_module = self.getNextPlugin()
             if next_module and not next_module == current_module:
                 current_module = next_module
-                current_plugin = current_module.Plugin()
+                current_plugin = imp.load_source("__init__", next_module["path"]).plugin()
                 current_plugin.setTileMatrix(twilight.interface.tile_matrix)
             while time.time() < current_time + self.config["PLUGIN_CYCLE_LENGTH"]:
                 tile_matrix = current_plugin.getNextFrame()
                 for pixel in tile_matrix:
                     twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
                 time.sleep(0.1)
-
-
-if __name__ == "__main__":
-    manager = PluginManager()
-    manager.loadPlugin("mood")
-    manager.loadPlugin("epilepsy")
-    manager.start()

@@ -18,7 +18,11 @@ class MoodLightPlugin(Plugin):
         green = int(255 * green)
         blue = int(255 * blue)
         frame = {}
-        for tile in self.tile_matrix:
-            if tile is not None:
-                frame[tile["unit"]] = (red, green, blue)
+        for row in self.tile_matrix:
+            for tile in row:
+                if tile is not None:
+                    frame[tile["unit"]] = (red, green, blue)
         return frame
+
+
+plugin = MoodLightPlugin

@@ -16,7 +16,11 @@ class EpilepsyPlugin(Plugin):
         green = random.randint(0, 254)
         blue = random.randint(0, 254)
         frame = {}
-        for tile in self.tile_matrix:
-            if tile is not None:
-                frame[tile["unit"]] = (red, green, blue)
+        for row in self.tile_matrix:
+            for tile in row:
+                if tile is not None:
+                    frame[tile["unit"]] = (red, green, blue)
         return frame
+
+
+plugin = EpilepsyPlugin
