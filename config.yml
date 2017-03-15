@@ -11,11 +11,6 @@ NUM_TILES_WIDTH: 10
 # The number of RGB LEDS on each strip.
 NUM_LEDS_PER_STRIP: 140
 
-# 255, or 0xFF is being used a sentinel value in message strings sent to the
-# controllers. CLAMP then, represents the highest value that should be sent as
-# part of a color message.
-CLAMP: 254
-
 # Safe amount of time (milis) between consecutive writes to the same unit.
 RATE_LIMIT_TIME: 100
 

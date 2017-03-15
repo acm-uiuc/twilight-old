@@ -9,6 +9,12 @@ from config_loader import config_loader
 """The name of the YAML file from which to get configuration."""
 CONFIG_FILE_NAME = 'config.yml'
 
+"""Synchronization header to send to the Teensy on each command."""
+SYNC_HEADER = b'\xDE\xAD\xBE\xEF'
+
+"""Command byte that tells the Teensy to display a frame."""
+CMD_DISPLAY_FRAME = SYNC_HEADER + b'\x01'
+
 
 default_config = {
     # The number of full tiles in the North-South span of the room.
@@ -19,11 +25,6 @@ default_config = {
 
     # The number of RGB LEDS on each strip.
     'NUM_LEDS_PER_STRIP': 140,
-
-    # 255, or 0xFF is being used as a sentinel value in message strings sent to the
-    # controllers. CLAMP then, represents the highest value that should be sent as
-    # part of a color message.
-    'CLAMP': 254,
 
     # Safe amount of time (milis) between consecutive writes to the same unit.
     'RATE_LIMIT_TIME': 10,
@@ -96,7 +97,7 @@ class Twilight:
                     daemon=True,
                     args=(unit_queue, port)
                 )
-                unit_queue.put(b'\xFF' + b'\x00x00x00' * config['NUM_LEDS_PER_STRIP'])
+                unit_queue.put(CMD_DISPLAY_FRAME + b'\x00x00x00' * config['NUM_LEDS_PER_STRIP'])
                 self.threads[unit].start()
 
     def update_lights_helper(self, unit_queue, port):
@@ -164,10 +165,9 @@ class Twilight:
         # Colors are input as RGB. However, our LEDs take RBG :/
         rbg_colors = [(col[0], col[2], col[1]) for col in colors]
 
-        # Build the message and make sure all values are between 0 and CLAMP
+        # Build the message
         serialized_colors = list(sum(rbg_colors, ()))
-        serialized_colors = [max(0, min(config['CLAMP'], c)) for c in serialized_colors]
-        message = b'\xFF' + bytes(serialized_colors)
+        message = CMD_DISPLAY_FRAME + bytes(serialized_colors)
 
         if config['DEBUG_MODE']:
             # TODO: pass values to visualizer
