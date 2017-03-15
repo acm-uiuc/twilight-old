@@ -29,7 +29,7 @@ UNITS:
   a:
     north_south: 9
     west_east: 6
-    serial_port: '/dev/ttyACM2'
+    serial_port: '/dev/ttyACM0'
   b:
     north_south: 5
     west_east: 6
@@ -37,7 +37,7 @@ UNITS:
   c:
     north_south: 5
     west_east: 2
-    serial_port: '/dev/ttyACM0'
+    serial_port: '/dev/ttyACM2'
 
 # Folder for holding plugins
 PLUGINS_FOLDER: '/plugins/'

@@ -1,15 +1,17 @@
-import time
 import colorsys
-import twilight
 
 
 class Plugin:
-    
+
     def __init__(self):
         self.hue = 0.0
+        self.tile_matrix = []
 
     def ready(self):
         return True
+
+    def setTileMatrix(self, tile_matrix):
+        self.tile_matrix = tile_matrix
 
     def getNextFrame(self):
         self.hue += 0.0025
@@ -17,4 +19,8 @@ class Plugin:
         red = int(255 * red)
         green = int(255 * green)
         blue = int(255 * blue)
-        twilight.interface.set_all_unit_color((red, green, blue))
+        frame = {}
+        for tile in self.tile_matrix:
+            if tile is not None:
+                frame[tile["unit"]] = (red, green, blue)
+        return frame
