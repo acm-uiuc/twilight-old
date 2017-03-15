@@ -35,7 +35,13 @@ default_config = {
     'DEBUG_MODE': True,
 
     # Information about Twilight panel units.
-    'UNITS': {}
+    'UNITS': {},
+
+    # Folder for holding plugins
+    'PLUGINS_FOLDER': '/plugins/',
+
+    # Default program length, in seconds
+    'PLUGIN_CYCLE_LENGTH': 30
 }
 
 

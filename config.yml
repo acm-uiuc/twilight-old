@@ -38,3 +38,9 @@ UNITS:
     north_south: 5
     west_east: 2
     serial_port: '/dev/ttyACM0'
+
+# Folder for holding plugins
+PLUGINS_FOLDER: '/plugins/'
+
+# Default program length, in seconds
+PLUGIN_CYCLE_LENGTH: 30
