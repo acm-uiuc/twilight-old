@@ -12,7 +12,7 @@ NUM_TILES_WIDTH: 10
 NUM_LEDS_PER_STRIP: 140
 
 # Safe amount of time (milis) between consecutive writes to the same unit.
-RATE_LIMIT_TIME: 0
+RATE_LIMIT_TIME: 100
 
 # TODO(wchill): write docstring for this.
 SERIAL_RATE: 921600
