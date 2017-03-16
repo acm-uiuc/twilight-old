@@ -4,12 +4,13 @@ import time
 import twilight
 from config_loader import config_loader
 
+PLUGIN_FILE_NAME = 'plugins.yml'
+
 
 class PluginManager:
 
     """Service for switching between plugins for Twilight"""
     def __init__(self):
-        PLUGIN_FILE_NAME = 'plugins.yml'
 
         default_config = {
             # Plugin data, priority in range 0-9 inclusive, persistent is boolean
@@ -19,10 +20,10 @@ class PluginManager:
         config_loader.register_config('plugin', PLUGIN_FILE_NAME, default_config)
         self.plugins = config_loader.load_config('plugin')
         self.loaded_plugins = []
-        self.blocked = {}
+        self.blocked = {}  # Dictionary to prevent multiple additions of same plugin to queue
         self.config = config_loader.load_config('twilight')
 
-    def getAvailablePlugins(self):
+    def get_available_plugins(self):
         """List all plugins located in the folder given in the config PLUGINS_FOLDER"""
         available_plugins = {}
         location = "." + self.config["PLUGINS_FOLDER"]
@@ -44,9 +45,9 @@ class PluginManager:
                 pass
         return available_plugins
 
-    def loadPlugin(self, plugin_name):
+    def load_plugin(self, plugin_name):
         """Loads plugin named plugin_name from plugins folder"""
-        plugins = self.getAvailablePlugins()
+        plugins = self.get_available_plugins()
         if plugin_name in plugins and plugin_name not in self.blocked:
             plugin_obj = {
                 "name": plugin_name,
@@ -64,7 +65,8 @@ class PluginManager:
             # plugin not found
             pass
 
-    def getNextPlugin(self):
+    def get_next_plugin(self):
+        """Retrieve the next plugin from the queue or return error if queue is empty"""
         for plugin in self.loaded_plugins:
             if not plugin["persistent"]:
                 self.loaded_plugins.remove(plugin)
@@ -74,27 +76,27 @@ class PluginManager:
 
     def start(self):
         """Begins cycling through plugins"""
-        current_module = None  # TODO: replace with default module
+        current_module = None  # TODO (warut-vijit): replace with default module
         current_plugin = None
         while True:
-            current_time = time.time()
-            next_module = self.getNextPlugin()
+            start_time = time.time()  # gets time when current plugin starts
+            next_module = self.get_next_plugin()
             if next_module and not next_module == current_module:
                 # Load the next plugin and give it the current panel layout
                 current_module = next_module
                 current_plugin = imp.load_source("__init__", next_module["path"]).plugin()
                 current_plugin.setTileMatrix(twilight.interface.tile_matrix)
-
-            while time.time() < current_time + self.config["PLUGIN_CYCLE_LENGTH"]:
+            elif not next_module:
+                raise NotImplementedError
+            while time.time() < start_time + self.config["PLUGIN_CYCLE_LENGTH"]:
                 # Wait for the plugin to be ready
                 while not current_plugin.ready():
-                    time.sleep(0.01)
-                    pass
+                    time.sleep(self.config['RATE_LIMIT_TIME']/1000.0)
 
                 # Get and write the next frame
                 tile_matrix = current_plugin.getNextFrame()
                 for pixel in tile_matrix:
-                    if type(tile_matrix[pixel]) is tuple:
+                    if isinstance(tile_matrix[pixel], tuple):
                         twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
                     else:
                         twilight.interface.write_to_unit(pixel, tile_matrix[pixel])

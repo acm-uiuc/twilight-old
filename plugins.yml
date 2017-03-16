@@ -1,5 +1,7 @@
 # This is the central documentation for plugin settings.
 # Plugins not listed here are non-persistent and have priority 0
+# Priority determines order in which plugins will be played. Higher values will be played first
+# Persistence determines whether or not a plugin will be removed from the queue upon termination
 
 # Plugin data, priority in range 0-9 inclusive, persistent is boolean
 PLUGINS:
