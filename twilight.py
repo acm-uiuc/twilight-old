@@ -15,6 +15,8 @@ SYNC_HEADER = b'\xDE\xAD\xBE\xEF'
 """Command byte that tells the Teensy to display a frame."""
 CMD_DISPLAY_FRAME = SYNC_HEADER + b'\x01'
 
+"""Number of frames to use for FPS calculation"""
+FPS_FRAME_COUNT = 120
 
 default_config = {
     # The number of full tiles in the North-South span of the room.
@@ -62,6 +64,10 @@ class Twilight:
         self.rate_limit_dict = collections.defaultdict(int)
         self.should_safety_block = False
 
+        self.plugin_frame_times = {}
+        self.rendered_frame_times = {}
+        self.generated_frame_times = {}
+
         self.load_tile_matrix()
 
         if config['DEBUG_MODE']:
@@ -89,21 +95,24 @@ class Twilight:
             if not config['DEBUG_MODE']:
                 port = serial.Serial(my_unit['serial_port'], config['SERIAL_RATE'])
                 unit_queue = queue.Queue()
-
+                rendered_frame_times = collections.deque(maxlen=FPS_FRAME_COUNT)
+                generated_frame_times = collections.deque(maxlen=FPS_FRAME_COUNT)
                 # Set up the threads writing data to the serial port.
                 self.id_to_fd[unit] = port
                 self.id_to_queue[unit] = unit_queue
+                self.rendered_frame_times[unit] = rendered_frame_times
+                self.generated_frame_times[unit] = generated_frame_times
                 self.threads[unit] = threading.Thread(
                     target=self.update_lights_helper,
                     daemon=True,
-                    args=(unit_queue, port)
+                    args=(unit_queue, port, rendered_frame_times)
                 )
 
                 # Turn off all the LEDs.
                 unit_queue.put(CMD_DISPLAY_FRAME + b'\x00x00x00' * config['NUM_LEDS_PER_STRIP'])
                 self.threads[unit].start()
 
-    def update_lights_helper(self, unit_queue, port):
+    def update_lights_helper(self, unit_queue, port, frame_times):
         # TODO: Move the rate limiter into this code
         while True:
             lights = unit_queue.get()
@@ -122,6 +131,9 @@ class Twilight:
 
             # Write the frame.
             port.write(lights)
+
+            # Record the time frame was rendered for FPS calculation.
+            frame_times.append(time.time())
 
     def __repr__(self):
         """Returns a string representation of the layout of Twilight."""
@@ -167,6 +179,10 @@ class Twilight:
             # TODO: raise a more meaningful exception.
             # TODO: review this 140 number.
             raise Exception("Got %d colors, expected %d." % (len(colors), config['NUM_LEDS_PER_STRIP']))
+
+        # Record the time this frame was generated for FPS calculation
+        self.generated_frame_times[unit_id].append(time.time())
+
         if self.write_time_unsafe(unit_id):
             return
 
@@ -224,6 +240,36 @@ class Twilight:
 
         False by default."""
         self.should_safety_block = state
+
+    def get_generated_fps(self):
+        """Get the FPS of generated frames for each unit."""
+        fps = {}
+        for unit_id in self.generated_frame_times:
+            unit_deque = self.generated_frame_times[unit_id]
+            if len(unit_deque) > 1:
+                fps[unit_id] = len(unit_deque) / (unit_deque[-1] - unit_deque[0])
+            else:
+                fps[unit_id] = 0
+
+        return fps
+
+    def get_rendered_fps(self):
+        """Get the FPS of actually rendered frames for each unit."""
+        fps = {}
+        for unit_id in self.rendered_frame_times:
+            unit_deque = self.rendered_frame_times[unit_id]
+            if len(unit_deque) > 1:
+                fps[unit_id] = len(unit_deque) / (unit_deque[-1] - unit_deque[0])
+            else:
+                fps[unit_id] = 0
+
+        return fps
+
+    def clear_fps_data(self):
+        """Clear the deques containing frame times."""
+        for unit_id in self.rendered_frame_times:
+            self.rendered_frame_times[unit_id].clear()
+            self.generated_frame_times[unit_id].clear()
 
 
 interface = Twilight()

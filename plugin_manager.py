@@ -78,6 +78,9 @@ class PluginManager:
         """Begins cycling through plugins"""
         current_module = None  # TODO (warut-vijit): replace with default module
         current_plugin = None
+
+        last_fps_display_time = time.time()
+
         while True:
             start_time = time.time()  # gets time when current plugin starts
             next_module = self.get_next_plugin()
@@ -88,6 +91,10 @@ class PluginManager:
                 current_plugin.setTileMatrix(twilight.interface.tile_matrix)
             elif not next_module:
                 raise NotImplementedError
+
+            # Reset FPS data since we're changing plugins
+            twilight.interface.clear_fps_data()
+
             while time.time() < start_time + self.config["PLUGIN_CYCLE_LENGTH"]:
                 # Wait for the plugin to be ready
                 while not current_plugin.ready():
@@ -100,3 +107,12 @@ class PluginManager:
                         twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
                     else:
                         twilight.interface.write_to_unit(pixel, tile_matrix[pixel])
+
+                if time.time() - last_fps_display_time > 1.0:
+                    generated_fps = twilight.interface.get_generated_fps()
+                    rendered_fps = twilight.interface.get_rendered_fps()
+                    print('FPS (generated/rendered):')
+
+                    for unit_id in generated_fps:
+                        print('%s: %f/%f FPS' % (unit_id, generated_fps[unit_id], rendered_fps[unit_id]))
+                    last_fps_display_time = time.time()

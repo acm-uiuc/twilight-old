@@ -10,7 +10,7 @@ class EpilepsyPlugin(Plugin):
         self.last_frame_time = 0
 
     def ready(self):
-        return time.time() - self.last_frame_time > 0.1
+        return True
 
     def getNextFrame(self):
         """Returns a dict of the form unit_id:(r,g,b)"""

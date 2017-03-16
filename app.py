@@ -3,8 +3,8 @@ from plugin_manager import PluginManager
 
 def main():
     manager = PluginManager()
-    manager.loadPlugin("mood")
-    manager.loadPlugin("epilepsy")
+    manager.load_plugin("epilepsy")
+    manager.load_plugin("mood")
     manager.start()
 
 

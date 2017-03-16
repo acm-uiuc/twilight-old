@@ -66,7 +66,7 @@ void write_eeprom() {
 void setup() {
     // Note: on Teensy the set baud rate has no effect
     // Communication is always performed at 12Mbps
-    Serial.begin(460800);
+    Serial.begin(921600);
 
     FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
     fill_rainbow(leds, NUM_LEDS, 222);
