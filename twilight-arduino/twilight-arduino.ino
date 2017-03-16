@@ -6,7 +6,7 @@
 #endif
 
 #define NUM_LEDS 140
-#define DATA_PIN 6
+#define DATA_PIN 17
 
 // Wait until data is available in the serial receive buffer, then return one byte.
 // WARNING: On Teensy, when using USB serial, Serial.available() may only return 1 despite
@@ -70,7 +70,7 @@ void display_frame() {
     // Read enough bytes to fill up our framebuffer, then update the LEDs.
     int bytes_read = 0;
     while(bytes_read < NUM_LEDS * 3) {
-        bytes_read += Serial.readBytes(((uint8_t*) leds) + bytes_read, NUM_LEDS * 3 - bytes_read);
+        bytes_read += Serial.readBytes(((char*) leds) + bytes_read, NUM_LEDS * 3 - bytes_read);
     }
     FastLED.show();
 }
@@ -116,7 +116,7 @@ void loop() {
     // Check for synchronization handshake
     bool valid_header = 1;    
     while(blocking_serial_read() != handshake[0]);
-    for(int i = 1; i < sizeof(handshake); i++) {
+    for(size_t i = 1; i < sizeof(handshake); i++) {
         if(blocking_serial_read() != handshake[i]) {
             valid_header = 0;
             break;
