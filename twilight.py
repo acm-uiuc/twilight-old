@@ -64,9 +64,10 @@ class Twilight:
         self.rate_limit_dict = collections.defaultdict(int)
         self.should_safety_block = False
 
-        self.plugin_frame_times = {}
-        self.rendered_frame_times = {}
+        # Keep track of the times that frames were (a) generated and (b) rendered
+        # The two numbers won't be the same since a lot of generated frames can get dropped
         self.generated_frame_times = {}
+        self.rendered_frame_times = {}
 
         self.load_tile_matrix()
 
@@ -93,6 +94,7 @@ class Twilight:
             self.tile_matrix[north_south][west_east] = my_unit
 
             if not config['DEBUG_MODE']:
+                # TODO: modularize this function
                 port = serial.Serial(my_unit['serial_port'], config['SERIAL_RATE'])
                 unit_queue = queue.Queue()
                 rendered_frame_times = collections.deque(maxlen=FPS_FRAME_COUNT)
@@ -113,6 +115,15 @@ class Twilight:
                 self.threads[unit].start()
 
     def update_lights_helper(self, unit_queue, port, frame_times):
+        """Helper function running in a separate thread to do several things:
+        - Grab and display the most recent frame
+        - Clean up serial ports when program is closed
+        - Record frame times when they are rendered to the panels
+
+        unit_queue is a thread safe queue holding frames from the main thread.
+        port is the file-like serial port object.
+        frame_times is a thread safe deque holding frame timings after they are rendered.
+        """
         # TODO: Move the rate limiter into this code
         while True:
             lights = unit_queue.get()

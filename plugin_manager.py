@@ -79,6 +79,7 @@ class PluginManager:
         current_module = None  # TODO (warut-vijit): replace with default module
         current_plugin = None
 
+        # Keep track of when we last displayed FPS.
         last_fps_display_time = time.time()
 
         while True:
