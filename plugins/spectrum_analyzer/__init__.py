@@ -99,6 +99,7 @@ class SpectrumAnalyzerPlugin(Plugin):
         self.music_subprocess.start()
 
     def calculate_channel_frequency(self, min_freq, max_freq, num_channels):
+        """Calculate the frequency bands to separate the audio waveform into."""
         octaves = (np.log(max_freq / min_freq)) / np.log(2)
         octaves_per_channel = octaves / num_channels
         frequency_limits = []
@@ -113,6 +114,13 @@ class SpectrumAnalyzerPlugin(Plugin):
             self.frequency_limits.append((frequency_limits[pin], frequency_limits[pin + 1]))
 
     def get_next_music_frame(self):
+        """Get the last frame of audio data played by the playback subprocess.
+        If a new song just started playing, update the known characteristics of the song.
+        Afterwards, if playback has finished, start playing the next song.
+
+        Return True if a valid frame of audio data is available."""
+
+        # Clear the audio frame queue and update our variables
         try:
             while not self.music_queue.empty():
                 data = self.music_queue.get_nowait()
@@ -123,9 +131,12 @@ class SpectrumAnalyzerPlugin(Plugin):
         except queue.Empty:
             pass
 
+        # Check if current song ended and play next song if so
         if not self.music_subprocess.is_alive():
             # TODO: Have the plugin end when playlist is complete, instead of looping
             # Should also make this configurable
+
+            # Advance playlist, then start song
             self.playlist_index = (self.playlist_index + 1) % len(config['PLAYLIST'])
             self.music_queue = multiprocessing.Queue()
             self.music_subprocess = multiprocessing.Process(
@@ -141,9 +152,11 @@ class SpectrumAnalyzerPlugin(Plugin):
         return self.last_music_frame is not None
 
     def ready(self):
+        # Check if we have a valid audio frame and if enough time has passed
         return self.get_next_music_frame() and (time.time() - self.last_frame_time > (1.0 / config['UPDATE_HZ']))
 
     def getNextFrame(self):
+        # Get an audio frame, then perform FFT
         self.get_next_music_frame()
         matrix = calculate_levels(
             self.last_music_frame,
@@ -162,12 +175,17 @@ class SpectrumAnalyzerPlugin(Plugin):
 
         # This function divides the LEDs into two halves and maps each LED in a half to an audio channel
         for channel in range(0, len(colors)):
+            # This hue calculation gets us a rainbow-like color distribution
             hue = config['INITIAL_HUE'] + (channel / len(self.frequency_limits))
+
             saturation = 1.0
             value = matrix[channel] - mean + 0.5 * std
             value /= 1.25 * std
 
+            # Colorsys takes 0.0 - 1.0 for all 3 parameters
             red, green, blue = colorsys.hsv_to_rgb(hue, saturation, value)
+
+            # Clamp our RGB values
             red = int(255 * red)
             green = int(255 * green)
             blue = int(255 * blue)
@@ -189,6 +207,7 @@ class SpectrumAnalyzerPlugin(Plugin):
 
             colors[channel] = (red, green, blue)
 
+        # Duplicate our colors to the other half of the LED strip
         colors_doubled = colors * 2
 
         frame = {}
@@ -197,8 +216,9 @@ class SpectrumAnalyzerPlugin(Plugin):
                 if tile is not None:
                     frame[tile['unit']] = colors_doubled
 
-        self.last_frame_time = time.time()
+        # Clear our processed audio frame so we don't use stale data
         self.last_music_frame = None
+        self.last_frame_time = time.time()
         return frame
 
 
