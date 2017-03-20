@@ -30,6 +30,14 @@ default_config = {
     # Starting LED hue, from 0.0 to 1.0
     'INITIAL_HUE': 0.0,
 
+    # How much weight to put towards the current color frame
+    # A fade factor of 1.0 disables fading
+    'FADE_FACTOR': 0.7,
+
+    # How fast to scroll the LEDs around the panel, in LEDs per frame
+    # A negative speed scrolls backwards and 0 disables scrolling
+    'SCROLL_SPEED': 1.0,
+
     # List of audio files to play, in order
     'PLAYLIST': []
 }
@@ -76,9 +84,11 @@ class SpectrumAnalyzerPlugin(Plugin):
         Plugin.__init__(self)
         self.playlist_index = 0
         self.last_frame_time = 0
+        self.starting_led = 0.0
 
         self.music_info = None
         self.last_music_frame = None
+        self.last_color_frame = [(0, 0, 0) for _ in range(twilight_config['NUM_LEDS_PER_STRIP'] // 2)]
 
         self.frequency_limits = None
         self.calculate_channel_frequency(
@@ -205,10 +215,28 @@ class SpectrumAnalyzerPlugin(Plugin):
             elif blue < 0:
                 blue = 0
 
-            colors[channel] = (red, green, blue)
+            old_r, old_g, old_b = self.last_color_frame[channel]
+
+            factor = config['FADE_FACTOR']
+            opposite = 1.0 - factor
+
+            colors[channel] = (
+                int(factor * red + opposite * old_r),
+                int(factor * green + opposite * old_g),
+                int(factor * blue + opposite * old_b)
+            )
+
+        self.last_color_frame = colors
+
+        self.starting_led += config['SCROLL_SPEED']
+        if self.starting_led > len(colors) * 2:
+            self.starting_led -= len(colors) * 2
+        elif self.starting_led < 0:
+            self.starting_led += len(colors) * 2
 
         # Duplicate our colors to the other half of the LED strip
         colors_doubled = colors * 2
+        colors_doubled = colors_doubled[int(self.starting_led):] + colors_doubled[:int(self.starting_led)]
 
         frame = {}
         for row in self.tile_matrix:
