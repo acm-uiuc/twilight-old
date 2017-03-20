@@ -72,7 +72,7 @@ class PluginManager:
             else:
                 raise ValueError("{0} does not match any filter stored in plugins.yml.".format(filter_folder))
         return available_filters
-        #TODO: Reduce code duplication
+        # TODO: Reduce code duplication
 
     def load_plugin(self, plugin_name):
         """Loads plugin named plugin_name from plugins folder. Returns true if successful, else false"""
@@ -110,7 +110,7 @@ class PluginManager:
             self.loaded_filters.append(filter_obj)
             return True
         return False
-        #TODO: Reduce code duplication
+        # TODO: Reduce code duplication
 
     def get_next_plugin(self):
         """Retrieve the next plugin from the queue or return error if queue is empty. Returns next plugin or None"""
@@ -142,7 +142,6 @@ class PluginManager:
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
                 current_plugin = mod.plugin()
-
                 current_plugin.set_tile_matrix(twilight.interface.tile_matrix)
             # only raise error if nothing is playing and queue is empty
             elif not next_module and current_module is None:
@@ -161,12 +160,14 @@ class PluginManager:
 
                 # Apply filters to frame
                 for current_filter in self.loaded_filters:
-                    filter_class = imp.load_source("__init__", current_filter["path"])
-                    filter_plugin = filter_class.filter_plugin()
+                    spec = importlib.util.spec_from_file_location(current_filter['name'], current_filter['path'])
+                    mod = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(mod)
+                    filter_plugin = mod.filter_plugin()
                     tile_matrix = filter_plugin.apply_to_frame(tile_matrix)
-                    if tile_matrix is None: # filter dropped frame
+                    if tile_matrix is None:  # filter dropped frame
                         break
-                
+
                 if tile_matrix is not None:
                     for pixel in tile_matrix:
                         if isinstance(tile_matrix[pixel], tuple):
