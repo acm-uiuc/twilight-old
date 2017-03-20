@@ -1,4 +1,4 @@
-import imp
+import importlib.util
 import os
 import time
 import twilight
@@ -88,7 +88,14 @@ class PluginManager:
             if next_module and not next_module == current_module:
                 # Load the next plugin and give it the current panel layout
                 current_module = next_module
-                current_plugin = imp.load_source("__init__", next_module["path"]).plugin()
+
+                # Dynamically import Python module
+                # http://stackoverflow.com/a/41595552
+                spec = importlib.util.spec_from_file_location(next_module['name'], next_module['path'])
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                current_plugin = mod.plugin()
+
                 current_plugin.setTileMatrix(twilight.interface.tile_matrix)
             elif not next_module:
                 raise NotImplementedError

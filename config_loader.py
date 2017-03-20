@@ -30,14 +30,18 @@ class Config:
             my_dict = self.config_dicts[config_key]
 
             """Read file and set values"""
-            with open(filename, 'r') as f:
-                config_dict = ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
+            try:
+                with open(filename, 'r') as f:
+                    config_dict = ruamel.yaml.load(f.read(), ruamel.yaml.RoundTripLoader)
 
-                """Dictionaries must have a key for every variable in a config file."""
-                for key in config_dict:
-                    if key not in my_dict:
-                        raise RuntimeError("%s has not been declared in %s plugin" % (key, config_key))
-                    my_dict[key] = config_dict[key]
+                    """Dictionaries must have a key for every variable in a config file."""
+                    for key in config_dict:
+                        if key not in my_dict:
+                            raise RuntimeError("%s has not been declared in %s plugin" % (key, config_key))
+                        my_dict[key] = config_dict[key]
+            except FileNotFoundError:
+                """If a config file is not found, just keep the default values."""
+                pass
 
         return self.config_dicts[my_config_key] if my_config_key else None
 

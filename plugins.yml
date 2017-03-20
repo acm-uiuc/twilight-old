@@ -5,9 +5,12 @@
 
 # Plugin data, priority in range 0-9 inclusive, persistent is boolean
 PLUGINS:
+  spectrum_analyzer:
+    priority: 9
+    persistent: True
   epilepsy:
     priority: 0
     persistent: False
   mood:
     priority: 0
-    persistent: False
+    persistent: True 
