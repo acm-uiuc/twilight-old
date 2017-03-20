@@ -12,7 +12,7 @@ class EpilepsyPlugin(Plugin):
     def ready(self):
         return True
 
-    def getNextFrame(self):
+    def get_next_frame(self):
         """Returns a dict of the form unit_id:(r,g,b)"""
         red = random.randint(0, 254)
         green = random.randint(0, 254)

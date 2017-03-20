@@ -13,7 +13,7 @@ class MoodLightPlugin(Plugin):
     def ready(self):
         return time.time() - self.last_frame_time > 0.1
 
-    def getNextFrame(self):
+    def get_next_frame(self):
         self.hue += 0.0025
         red, green, blue = colorsys.hsv_to_rgb(self.hue, 1.0, 1.0)
         red = int(255 * red)

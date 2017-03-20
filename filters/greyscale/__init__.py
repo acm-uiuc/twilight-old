@@ -11,7 +11,7 @@ class GreyscaleFilter(Filter):
     def active(self):
         return time.time() - self.last_frame_time > 0.1
 
-    def applyToFrame(self, tile_matrix):
+    def apply_to_frame(self, tile_matrix):
         output_matrix = {}
         for unit in tile_matrix:
             if isinstance(tile_matrix[unit], tuple):
@@ -27,4 +27,4 @@ class GreyscaleFilter(Filter):
         return output_matrix
 
 
-filter = GreyscaleFilter
+filter_plugin = GreyscaleFilter
