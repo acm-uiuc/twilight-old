@@ -5,6 +5,7 @@ import time
 
 import alsaaudio as aa
 import audioread
+import pyaudio
 import numpy as np
 from numpy import sum as npsum
 from numpy import abs as npabs
@@ -38,8 +39,15 @@ default_config = {
     # A negative speed scrolls backwards and 0 disables scrolling
     'SCROLL_SPEED': 1.0,
 
+    # How much to shift LED hues per frame
+    # A negative speed shifts backwards and 0 disables shifting
+    'HUE_SHIFT_FACTOR': 0.025,
+
     # List of audio files to play, in order
-    'PLAYLIST': []
+    'PLAYLIST': [],
+
+    # Use microphone input instead of songs
+    'USE_MIC': True
 }
 
 config_loader.register_config('spectrum_analyzer', CONFIG_FILE_NAME, default_config)
@@ -49,32 +57,56 @@ twilight_config = config_loader.load_config('twilight')
 
 def play_music(song_filename, music_frame_queue):
 
-    # Open music file and get its characteristics
-    music_file = audioread.audio_open(song_filename)
+    if song_filename is not None:
+        # Open music file and get its characteristics
+        music_file = audioread.audio_open(song_filename)
 
-    num_channels = music_file.channels
-    sample_rate = music_file.samplerate
+        num_channels = music_file.channels
+        sample_rate = music_file.samplerate
 
-    # Set up audio playback
-    output = aa.PCM(aa.PCM_PLAYBACK, aa.PCM_NORMAL)
-    output.setchannels(num_channels)
-    output.setrate(sample_rate)
-    output.setformat(aa.PCM_FORMAT_S16_LE)
-    output.setperiodsize(config['CHUNK_SIZE'])
+        # Set up audio playback
+        output = aa.PCM(aa.PCM_PLAYBACK, aa.PCM_NORMAL)
+        output.setchannels(num_channels)
+        output.setrate(sample_rate)
+        output.setformat(aa.PCM_FORMAT_S16_LE)
+        output.setperiodsize(config['CHUNK_SIZE'])
 
-    # Pass song information to parent process
-    music_info = {
-        'music_filename': song_filename,
-        'num_channels': music_file.channels,
-        'sample_rate': music_file.samplerate,
-        'duration': music_file.duration
-    }
-    music_frame_queue.put(music_info)
+        # Pass song information to parent process
+        music_info = {
+            'music_filename': song_filename,
+            'num_channels': music_file.channels,
+            'sample_rate': music_file.samplerate,
+            'duration': music_file.duration
+        }
+        music_frame_queue.put(music_info)
 
-    # Start playing
-    for data in music_file:
-        output.write(data)
-        music_frame_queue.put(data)
+        # Start playing
+        for data in music_file:
+            output.write(data)
+            music_frame_queue.put(data)
+
+    else:
+        # Use microphone input
+        p = pyaudio.PyAudio()
+        stream = p.open(
+            format=pyaudio.paInt16,
+            channels=2,
+            rate=44100,
+            input=True,
+            frames_per_buffer=config['CHUNK_SIZE']
+        )
+
+        music_info = {
+            'music_filename': 'microphone',
+            'num_channels': 2,
+            'sample_rate': 44100,
+            'duration': None
+        }
+        music_frame_queue.put(music_info)
+
+        while True:
+            data = stream.read(config['CHUNK_SIZE'])
+            music_frame_queue.put(data)
 
 
 # TODO: Extend plugin API to make this plugin more useful
@@ -85,6 +117,7 @@ class SpectrumAnalyzerPlugin(Plugin):
         self.playlist_index = 0
         self.last_frame_time = 0
         self.starting_led = 0.0
+        self.starting_hue = config['INITIAL_HUE']
 
         self.music_info = None
         self.last_music_frame = None
@@ -98,14 +131,24 @@ class SpectrumAnalyzerPlugin(Plugin):
         )
 
         self.music_queue = multiprocessing.Queue()
-        self.music_subprocess = multiprocessing.Process(
-            target=play_music,
-            kwargs={
-                'song_filename': config['PLAYLIST'][self.playlist_index],
-                'music_frame_queue': self.music_queue
-            },
-            daemon=True
-        )
+        if config['USE_MIC']:
+            self.music_subprocess = multiprocessing.Process(
+                target=play_music,
+                kwargs={
+                    'song_filename': None,
+                    'music_frame_queue': self.music_queue
+                },
+                daemon=False
+            )
+        else:
+            self.music_subprocess = multiprocessing.Process(
+                target=play_music,
+                kwargs={
+                    'song_filename': config['PLAYLIST'][self.playlist_index],
+                    'music_frame_queue': self.music_queue
+                },
+                daemon=True
+            )
         self.music_subprocess.start()
 
     def calculate_channel_frequency(self, min_freq, max_freq, num_channels):
@@ -183,10 +226,12 @@ class SpectrumAnalyzerPlugin(Plugin):
         mean = 12.0
         std = 1.5
 
+        self.starting_hue += config['HUE_SHIFT_FACTOR']
+
         # This function divides the LEDs into two halves and maps each LED in a half to an audio channel
         for channel in range(0, len(colors)):
             # This hue calculation gets us a rainbow-like color distribution
-            hue = config['INITIAL_HUE'] + (channel / len(self.frequency_limits))
+            hue = self.starting_hue + (channel / len(self.frequency_limits))
 
             saturation = 1.0
             value = matrix[channel] - mean + 0.5 * std
