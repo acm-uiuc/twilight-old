@@ -43,6 +43,9 @@ default_config = {
     # Folder for holding plugins
     'PLUGINS_FOLDER': '/plugins/',
 
+    # Folder for holding filters
+    'FILTERS_FOLDER': '/filters/',
+
     # Default program length, in seconds
     'PLUGIN_CYCLE_LENGTH': 30
 }

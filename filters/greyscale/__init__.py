@@ -15,12 +15,12 @@ class GreyscaleFilter(Filter):
         output_matrix = {}
         for unit in tile_matrix:
             if isinstance(tile_matrix[unit], tuple):
-                avg = sum(tile_matrix[unit])/3
+                avg = sum(tile_matrix[unit])//3
                 output_matrix[unit] = (avg, avg, avg)
             else:
                 unit_pixels = []
                 for pixel in tile_matrix[unit]:
-                    avg = sum(pixel)/3
+                    avg = sum(pixel)//3
                     unit_pixels.append((avg, avg, avg))
                 output_matrix[unit] = unit_pixels
         self.last_frame_time = time.time()

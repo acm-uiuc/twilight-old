@@ -13,9 +13,9 @@ PLUGINS:
     persistent: False
   mood:
     priority: 0
-    persistent: False
+    persistent: True
 
 # Filter data, priority in range 0-9 inclusive. Filters are persistent by default
 FILTERS:
-  flux:
+  greyscale:
     priority: 0
