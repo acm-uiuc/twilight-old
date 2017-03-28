@@ -19,3 +19,5 @@ PLUGINS:
 FILTERS:
   greyscale:
     priority: 0
+  brightness:
+    priority: 9

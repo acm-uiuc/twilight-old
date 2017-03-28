@@ -114,6 +114,7 @@ class SpectrumAnalyzerPlugin(Plugin):
 
     def __init__(self):
         Plugin.__init__(self)
+        self.name = "Spectrum Analyzer"
         self.playlist_index = 0
         self.last_frame_time = 0
         self.starting_led = 0.0

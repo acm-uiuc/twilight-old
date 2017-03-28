@@ -7,6 +7,10 @@ class MoodLightPlugin(Plugin):
 
     def __init__(self):
         Plugin.__init__(self)
+        self.name = "Mood Light Plugin"
+        self.parameters = {
+            "speed": 0.0025
+        }
         self.hue = 0.0
         self.last_frame_time = 0
 
@@ -14,7 +18,7 @@ class MoodLightPlugin(Plugin):
         return time.time() - self.last_frame_time > 0.1
 
     def get_next_frame(self):
-        self.hue += 0.0025
+        self.hue += self.parameters["speed"]
         red, green, blue = colorsys.hsv_to_rgb(self.hue, 1.0, 1.0)
         red = int(255 * red)
         green = int(255 * green)

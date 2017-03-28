@@ -7,6 +7,7 @@ class EpilepsyPlugin(Plugin):
 
     def __init__(self):
         Plugin.__init__(self)
+        self.name = "Epilepsy Plugin"
         self.last_frame_time = 0
 
     def ready(self):
