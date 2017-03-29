@@ -209,6 +209,10 @@ class SpectrumAnalyzerPlugin(Plugin):
         return self.get_next_music_frame() and (time.time() - self.last_frame_time > (1.0 / config['UPDATE_HZ']))
 
     def getNextFrame(self):
+
+        # Update our last frame time at the beginning to prevent jitter from processing
+        self.last_frame_time = time.time()
+
         # Get an audio frame, then perform FFT
         self.get_next_music_frame()
         matrix = calculate_levels(
@@ -291,7 +295,6 @@ class SpectrumAnalyzerPlugin(Plugin):
 
         # Clear our processed audio frame so we don't use stale data
         self.last_music_frame = None
-        self.last_frame_time = time.time()
         return frame
 
 
