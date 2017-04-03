@@ -1,5 +1,7 @@
 # Twilight
 
+[![Join the chat at https://gitter.im/acm-uiuc/twilight](https://badges.gitter.im/acm-uiuc/twilight.svg)](https://gitter.im/acm-uiuc/twilight?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Twilight is the ceiling lighting system at the ACM Office. 
 
 Example usage:
