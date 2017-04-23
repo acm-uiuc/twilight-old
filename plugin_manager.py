@@ -2,6 +2,7 @@ import importlib.util
 import os
 import time
 import twilight
+import threading
 from config_loader import config_loader
 
 PLUGIN_FILE_NAME = 'plugins.yml'
@@ -112,74 +113,77 @@ class PluginManager:
         return False
         # TODO: Reduce code duplication
 
-    def get_next_plugin(self):
-        """Retrieve the next plugin from the queue or return error if queue is empty. Returns next plugin or None"""
+    def load_next_plugin(self):
+        """Retrieve the next plugin from the queue. Returns next plugin or None if queue is empty"""
         for plugin in self.loaded_plugins:
             if not plugin["persistent"]:
                 self.loaded_plugins.remove(plugin)
                 del self.blocked[plugin["name"]]  # allow this plugin to be re-added
-            return plugin
+            # Dynamically import Python module
+            # http://stackoverflow.com/a/41595552
+            spec = importlib.util.spec_from_file_location(plugin['name'], plugin['path'])
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            current_plugin = mod.plugin()
+            return current_plugin
         return None
 
     def start(self):
         """Begins cycling through plugins"""
-        current_module = None  # TODO (warut-vijit): replace with default module
-        current_plugin = None
+        player = PluginPlayerThread(self)
+        player.run()
 
-        # Keep track of when we last displayed FPS.
-        last_fps_display_time = time.time()
 
+class PluginPlayerThread(threading.Thread):
+
+    """Helper class for playing plugins in a separate thread from the manager"""
+    def __init__(self, manager):
+        threading.Thread.__init__(self)
+        self.manager = manager
+        self.plugin = None
+        self.start_time = None
+        self.last_fps_display_time = time.time()  # Keep track of when we last displayed FPS.
+
+    def run(self):
         while True:
-            start_time = time.time()  # gets time when current plugin starts
-            next_module = self.get_next_plugin()
-            if next_module and not next_module == current_module:
-                # Load the next plugin and give it the current panel layout
-                current_module = next_module
+            if time.time() > self.start_time + self.manager.config["PLUGIN_CYCLE_LENGTH"]:
+                next_plugin = self.manager.load_next_plugin()
+                if next_plugin is None:
+                    raise NotImplementedError
+                if not self.plugin == next_plugin:
+                    self.plugin = next_plugin
+                    self.plugin.set_tile_matrix(twilight.interface.tile_matrix)
+                    twilight.interface.clear_fps_data()
+            # Wait for the plugin to be ready
+            while not self.plugin.ready():
+                time.sleep(self.manager.config['RATE_LIMIT_TIME']/1000.0)
 
-                # Dynamically import Python module
-                # http://stackoverflow.com/a/41595552
-                spec = importlib.util.spec_from_file_location(next_module['name'], next_module['path'])
+            # Get and write the next frame
+            tile_matrix = self.plugin.get_next_frame()
+
+            # Apply filters to frame
+            for current_filter in self.manager.loaded_filters:
+                spec = importlib.util.spec_from_file_location(current_filter['name'], current_filter['path'])
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
-                current_plugin = mod.plugin()
-                current_plugin.set_tile_matrix(twilight.interface.tile_matrix)
-            # only raise error if nothing is playing and queue is empty
-            elif not next_module and current_module is None:
-                raise NotImplementedError
+                filter_plugin = mod.filter_plugin()
+                tile_matrix = filter_plugin.apply_to_frame(tile_matrix)
+                if tile_matrix is None:  # filter dropped frame
+                    break
 
-            # Reset FPS data since we're changing plugins
-            twilight.interface.clear_fps_data()
+            if tile_matrix is not None:
+                for pixel in tile_matrix:
+                    if isinstance(tile_matrix[pixel], tuple):
+                        twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
+                    else:
+                        twilight.interface.write_to_unit(pixel, tile_matrix[pixel])
 
-            while time.time() < start_time + self.config["PLUGIN_CYCLE_LENGTH"]:
-                # Wait for the plugin to be ready
-                while not current_plugin.ready():
-                    time.sleep(self.config['RATE_LIMIT_TIME']/1000.0)
+            # Compute effective FPS
+            if time.time() - self.last_fps_display_time > 1.0:
+                generated_fps = twilight.interface.get_generated_fps()
+                rendered_fps = twilight.interface.get_rendered_fps()
+                print('FPS (generated/rendered):')
 
-                # Get and write the next frame
-                tile_matrix = current_plugin.get_next_frame()
-
-                # Apply filters to frame
-                for current_filter in self.loaded_filters:
-                    spec = importlib.util.spec_from_file_location(current_filter['name'], current_filter['path'])
-                    mod = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(mod)
-                    filter_plugin = mod.filter_plugin()
-                    tile_matrix = filter_plugin.apply_to_frame(tile_matrix)
-                    if tile_matrix is None:  # filter dropped frame
-                        break
-
-                if tile_matrix is not None:
-                    for pixel in tile_matrix:
-                        if isinstance(tile_matrix[pixel], tuple):
-                            twilight.interface.set_unit_color(pixel, tile_matrix[pixel])
-                        else:
-                            twilight.interface.write_to_unit(pixel, tile_matrix[pixel])
-
-                if time.time() - last_fps_display_time > 1.0:
-                    generated_fps = twilight.interface.get_generated_fps()
-                    rendered_fps = twilight.interface.get_rendered_fps()
-                    print('FPS (generated/rendered):')
-
-                    for unit_id in generated_fps:
-                        print('%s: %f/%f FPS' % (unit_id, generated_fps[unit_id], rendered_fps[unit_id]))
-                    last_fps_display_time = time.time()
+                for unit_id in generated_fps:
+                    print('%s: %f/%f FPS' % (unit_id, generated_fps[unit_id], rendered_fps[unit_id]))
+                self.last_fps_display_time = time.time()
