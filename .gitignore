@@ -4,3 +4,5 @@ __pycache__/
 *$py.class
 .ipynb_checkpoints/
 env/
+*.b\#*
+*.s\#*
