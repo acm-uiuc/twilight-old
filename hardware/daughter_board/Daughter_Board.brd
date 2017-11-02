@@ -244,6 +244,7 @@
 <text x="55.75" y="21" size="0.4064" layer="22" font="vector" rot="MR90">IC9</text>
 <text x="56" y="13.5" size="0.4064" layer="22" font="vector" rot="MR270">IC5</text>
 <text x="51.5" y="7" size="0.4064" layer="22" font="vector" rot="MR270">IC8</text>
+<text x="23.25" y="18" size="0.4064" layer="22" font="vector" rot="MR270">IC3</text>
 </plain>
 <libraries>
 <library name="pinhead" urn="urn:adsk.eagle:library:325">
