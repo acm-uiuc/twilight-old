@@ -2,7 +2,7 @@ import abc
 
 class msg(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, cfg):
+	def __init__(self):
         '''
         Instanciate a message
         '''
