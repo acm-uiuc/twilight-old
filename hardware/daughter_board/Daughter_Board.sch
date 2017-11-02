@@ -17044,8 +17044,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <attribute name="VALUE" x="27.305" y="81.28" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND6" gate="1" x="2.54" y="15.24"/>
-<instance part="P+3" gate="1" x="86.36" y="228.6" smashed="yes">
-<attribute name="VALUE" x="88.265" y="231.14" size="1.778" layer="96" rot="R180"/>
+<instance part="P+3" gate="1" x="86.36" y="236.22" smashed="yes">
+<attribute name="VALUE" x="88.265" y="238.76" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="GND2" gate="1" x="86.36" y="200.66" smashed="yes">
 <attribute name="VALUE" x="83.82" y="198.12" size="1.778" layer="96"/>
@@ -17060,13 +17060,13 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <attribute name="NAME" x="109.22" y="252.73" size="1.778" layer="95"/>
 <attribute name="VALUE" x="109.22" y="93.98" size="1.778" layer="96"/>
 </instance>
-<instance part="C5" gate="G$1" x="76.2" y="220.98" smashed="yes" rot="MR0">
-<attribute name="NAME" x="74.676" y="221.361" size="1.778" layer="95" rot="MR0"/>
-<attribute name="VALUE" x="74.676" y="216.281" size="1.778" layer="96" rot="MR0"/>
+<instance part="C5" gate="G$1" x="76.2" y="228.6" smashed="yes" rot="MR0">
+<attribute name="NAME" x="74.676" y="228.981" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="74.676" y="223.901" size="1.778" layer="96" rot="MR0"/>
 </instance>
-<instance part="C4" gate="G$1" x="66.04" y="220.98" smashed="yes" rot="MR0">
-<attribute name="NAME" x="64.516" y="221.361" size="1.778" layer="95" rot="MR0"/>
-<attribute name="VALUE" x="64.516" y="216.281" size="1.778" layer="96" rot="MR0"/>
+<instance part="C4" gate="G$1" x="66.04" y="228.6" smashed="yes" rot="MR0">
+<attribute name="NAME" x="64.516" y="228.981" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="64.516" y="223.901" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="C1" gate="G$1" x="238.76" y="274.32" rot="MR0"/>
 <instance part="P+10" gate="1" x="238.76" y="297.18" smashed="yes">
@@ -17198,9 +17198,9 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <instance part="R17" gate="G$1" x="210.82" y="114.3" rot="R180"/>
 <instance part="R18" gate="G$1" x="287.02" y="129.54" rot="R270"/>
 <instance part="R19" gate="G$1" x="294.64" y="129.54" rot="R270"/>
-<instance part="C3" gate="G$1" x="86.36" y="220.98" smashed="yes" rot="MR0">
-<attribute name="NAME" x="84.836" y="221.361" size="1.778" layer="95" rot="MR0"/>
-<attribute name="VALUE" x="84.836" y="216.281" size="1.778" layer="96" rot="MR0"/>
+<instance part="C3" gate="G$1" x="86.36" y="228.6" smashed="yes" rot="MR0">
+<attribute name="NAME" x="84.836" y="228.981" size="1.778" layer="95" rot="MR0"/>
+<attribute name="VALUE" x="84.836" y="223.901" size="1.778" layer="96" rot="MR0"/>
 </instance>
 <instance part="J1" gate="J$1" x="243.84" y="218.44"/>
 <instance part="J2" gate="J$1" x="243.84" y="203.2"/>
@@ -17334,14 +17334,12 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="RESET" gate="G$1" pin="2"/>
 </segment>
 <segment>
-<wire x1="86.36" y1="203.2" x2="86.36" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="215.9" x2="76.2" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="213.36" x2="86.36" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="213.36" x2="66.04" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="213.36" x2="66.04" y2="215.9" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="203.2" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="223.52" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="223.52" x2="66.04" y2="223.52" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="228.6" x2="91.44" y2="228.6" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="228.6" x2="91.44" y2="213.36" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="213.36" x2="86.36" y2="213.36" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="228.6" x2="91.44" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="223.52" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="203.2" x2="96.52" y2="203.2" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="203.2" x2="86.36" y2="203.2" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="210.82" x2="96.52" y2="210.82" width="0.1524" layer="91"/>
@@ -17350,8 +17348,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <wire x1="96.52" y1="205.74" x2="96.52" y2="203.2" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="208.28" x2="96.52" y2="208.28" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="205.74" x2="96.52" y2="205.74" width="0.1524" layer="91"/>
-<junction x="86.36" y="213.36"/>
-<junction x="76.2" y="213.36"/>
+<junction x="86.36" y="223.52"/>
+<junction x="76.2" y="223.52"/>
 <junction x="86.36" y="203.2"/>
 <junction x="96.52" y="203.2"/>
 <junction x="96.52" y="208.28"/>
@@ -17365,7 +17363,6 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="IC3" gate="1" pin="GND1"/>
 <pinref part="IC3" gate="1" pin="GND2"/>
 <pinref part="C3" gate="G$1" pin="2"/>
-<wire x1="86.36" y1="213.36" x2="86.36" y2="215.9" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <wire x1="238.76" y1="269.24" x2="238.76" y2="264.16" width="0.1524" layer="91"/>
@@ -17725,11 +17722,10 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <wire x1="25.4" y1="68.58" x2="25.4" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="86.36" y1="226.06" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="233.68" x2="86.36" y2="231.14" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="231.14" x2="96.52" y2="231.14" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="231.14" x2="88.9" y2="231.14" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="231.14" x2="88.9" y2="223.52" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="223.52" x2="66.04" y2="223.52" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="231.14" x2="86.36" y2="231.14" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="231.14" x2="66.04" y2="231.14" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="213.36" x2="96.52" y2="213.36" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="213.36" x2="96.52" y2="215.9" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="215.9" x2="96.52" y2="218.44" width="0.1524" layer="91"/>
@@ -17738,14 +17734,13 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <wire x1="96.52" y1="220.98" x2="96.52" y2="231.14" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="218.44" x2="96.52" y2="218.44" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="215.9" x2="96.52" y2="215.9" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="223.52" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="223.52" x2="88.9" y2="223.52" width="0.1524" layer="91"/>
-<junction x="76.2" y="223.52"/>
+<wire x1="76.2" y1="231.14" x2="86.36" y2="231.14" width="0.1524" layer="91"/>
+<junction x="76.2" y="231.14"/>
 <junction x="96.52" y="220.98"/>
 <junction x="96.52" y="231.14"/>
 <junction x="96.52" y="218.44"/>
 <junction x="96.52" y="215.9"/>
-<junction x="86.36" y="223.52"/>
+<junction x="86.36" y="231.14"/>
 <pinref part="P+3" gate="1" pin="+5V"/>
 <pinref part="IC3" gate="1" pin="AVCC"/>
 <pinref part="C4" gate="G$1" pin="1"/>
@@ -17892,6 +17887,11 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <wire x1="10.16" y1="68.58" x2="2.54" y2="68.58" width="0.1524" layer="91"/>
 <label x="-10.16" y="68.58" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="IC3" gate="1" pin="(SDA/INT1)PD1"/>
+<wire x1="175.26" y1="165.1" x2="190.5" y2="165.1" width="0.1524" layer="91"/>
+<label x="177.8" y="165.1" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="SCL" class="0">
 <segment>
@@ -17904,6 +17904,11 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="RPI-ZERO" gate="A" pin="5"/>
 <wire x1="10.16" y1="66.04" x2="2.54" y2="66.04" width="0.1524" layer="91"/>
 <label x="-10.16" y="66.04" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="1" pin="(SCL/INT0)PD0"/>
+<wire x1="175.26" y1="162.56" x2="190.5" y2="162.56" width="0.1524" layer="91"/>
+<label x="177.8" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PB3" class="0">
@@ -18007,8 +18012,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="RXD1" class="0">
 <segment>
 <wire x1="190.5" y1="167.64" x2="175.26" y2="167.64" width="0.1524" layer="91"/>
-<label x="179.705" y="168.275" size="1.778" layer="95"/>
 <pinref part="IC3" gate="1" pin="(RXD1/INT2)PD2"/>
+<label x="177.8" y="167.64" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="A" pin="+IN"/>
@@ -18024,8 +18029,8 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <net name="TXD1" class="0">
 <segment>
 <wire x1="190.5" y1="170.18" x2="175.26" y2="170.18" width="0.1524" layer="91"/>
-<label x="179.705" y="170.815" size="1.778" layer="95"/>
 <pinref part="IC3" gate="1" pin="(TXD1/INT3)PD3"/>
+<label x="177.8" y="170.18" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC5" gate="B" pin="+IN"/>
