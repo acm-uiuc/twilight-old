@@ -16682,7 +16682,7 @@ TXB0108
 <part name="Y1" library="SmartPrj" deviceset="RESONATOR" device="MU" value="CSTCE16M0V53-R0 16MHZ"/>
 <part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="R1" library="SmartPrj" deviceset="R-EU_" device="R0603" value="1M"/>
-<part name="RESET" library="SmartPrj" deviceset="TS42" device="" value="TS42031-160R-TR-7260"/>
+<part name="_" library="SmartPrj" deviceset="TS42" device="" value=""/>
 <part name="D3" library="diode" deviceset="DIODE-" device="MINIMELF" value="CD1206-S01575"/>
 <part name="IC1" library="linear" library_urn="urn:adsk.eagle:library:262" deviceset="LMV358?*" device="MM" package3d_urn="urn:adsk.eagle:package:16453/1" technology="X"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
@@ -16823,7 +16823,7 @@ TXB0108
 <attribute name="NAME" x="66.04" y="242.9764" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="66.675" y="240.792" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="RESET" gate="G$1" x="226.06" y="274.32"/>
+<instance part="_" gate="G$1" x="226.06" y="274.32"/>
 <instance part="D3" gate="G$1" x="256.54" y="287.02" smashed="yes" rot="R90">
 <attribute name="NAME" x="251.9426" y="289.56" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="261.3914" y="276.86" size="1.778" layer="96" rot="R90"/>
@@ -17049,8 +17049,8 @@ TXB0108
 <wire x1="228.6" y1="266.7" x2="228.6" y2="264.16" width="0.1524" layer="91"/>
 <junction x="228.6" y="266.7"/>
 <pinref part="GND12" gate="1" pin="GND"/>
-<pinref part="RESET" gate="G$1" pin="1"/>
-<pinref part="RESET" gate="G$1" pin="2"/>
+<pinref part="_" gate="G$1" pin="1"/>
+<pinref part="_" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <wire x1="86.36" y1="203.2" x2="86.36" y2="223.52" width="0.1524" layer="91"/>
@@ -17542,8 +17542,8 @@ TXB0108
 <wire x1="228.6" y1="279.4" x2="228.6" y2="281.94" width="0.1524" layer="91"/>
 <wire x1="228.6" y1="281.94" x2="226.06" y2="281.94" width="0.1524" layer="91"/>
 <wire x1="226.06" y1="281.94" x2="226.06" y2="279.4" width="0.1524" layer="91"/>
-<pinref part="RESET" gate="G$1" pin="4"/>
-<pinref part="RESET" gate="G$1" pin="3"/>
+<pinref part="_" gate="G$1" pin="4"/>
+<pinref part="_" gate="G$1" pin="3"/>
 <wire x1="238.76" y1="276.86" x2="238.76" y2="281.94" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="1"/>
 <wire x1="238.76" y1="281.94" x2="246.38" y2="281.94" width="0.1524" layer="91"/>
