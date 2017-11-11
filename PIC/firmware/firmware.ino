@@ -9,8 +9,6 @@ Thread Network = Thread();
 Thread DeviceI2C = Thread();
 ThreadController ctrlr = ThreadController();
 
-uint8_t counter = 0;
-
 void setup() {
     
     //Setup LED Thread 
@@ -38,18 +36,6 @@ void setup() {
 
 void loop() {
     ctrlr.run();
-    if (counter % 3 == 0) {
-        frame.SetColor(0,0,255);
-    }
-    
-    else if (counter % 3 == 1) {
-        frame.SetColor(0,255,0);
-    }
-
-    else {
-        frame.SetColor(255,0,0);
-    }
-    counter++; 
 }
 
 
