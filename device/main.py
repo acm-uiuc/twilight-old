@@ -1,3 +1,6 @@
+from uuid import getnode as get_mac
+
+DEVICE_ID = get_mac()
 
 def init():
     #Localize
