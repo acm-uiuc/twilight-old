@@ -1,7 +1,7 @@
 #ifndef DEVICE_I2C
 #define DEVICE_I2C
 
-#include "constants/directions.hpp"
+#include "../constants/directions.hpp"
 #include "Arduino.h" 
 
 

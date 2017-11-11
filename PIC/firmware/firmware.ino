@@ -12,7 +12,7 @@ ThreadController ctrlr = ThreadController();
 void setup() {
   
   //Setup LED Thread 
-  setup_leds();
+  setup_frame();
   LEDs.enabled = true;
   LEDs.setInterval(10);
   LEDs.onRun(update_frame);

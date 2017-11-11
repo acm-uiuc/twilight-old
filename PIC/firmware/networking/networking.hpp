@@ -3,8 +3,8 @@
 
 #include "Arduino.h" 
 #include <ArduinoSTL.h>
-#include "protocols/protocols.hpp"
-#include "constants/directions.hpp"
+//#include "protocols/protocols.hpp"
+#include "../constants/directions.hpp"
 
 
 
@@ -14,10 +14,10 @@ void multicast(char* msg);
 void send_msg(char* msg);
 std::vector<char*> recv_msgs();
 
-class NetworkExchange {
+typedef struct NetworkExchange_struct {
     std::vector<char*> inbox;
     std::vector<char*> outbox;
-};
+} NetworkExchange ;
 
 NetworkExchange interconnect = NetworkExchange();
 
@@ -35,17 +35,17 @@ void handle_msgs() {
     //Get new messages from other nodes
     if (Serial1.available()){
 
-        msg_ = strcat(msg, ';')
-        interconnect.inbox.push_back(strcat(msg_, NORTH));
+        //char* msg_ = strcat(msg, ';')
+        //interconnect.inbox.push_back(strcat(msg_, NORTH));
     }
     if (Serial2.available()){
 
-        msg_ = strcat(msg, ';')
-        interconnect.inbox.push_back(msg_, SOUTH);
+        //char* msg_ = strcat(msg, ';')
+        //interconnect.inbox.push_back(msg_, SOUTH);
     }
 
     //Send messages in outbox
-    for (int i = 0; i < interconnect.outbox.length; i++) {
+    for (int i = 0; i < interconnect.outbox.size(); i++) {
         multicast(interconnect.outbox[i]);
     }
     interconnect.outbox.clear();
@@ -56,7 +56,7 @@ void send_msg(char* msg) {
     interconnect.outbox.push_back(msg);
 }
 
-std::vector<std::pair<int,char*>> recv_msgs() {
+std::vector<char*> recv_msgs() {
     std::vector<char*> msgs = interconnect.inbox;
     interconnect.inbox.clear();
     return msgs;
