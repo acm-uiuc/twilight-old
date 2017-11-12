@@ -37,7 +37,8 @@ void setup() {
 
 void loop() {
     ctrlr.run();
-    send_msg("BLUE");
+    //send_msg("BLUE");
+    multicast("BLUE");
     std::vector<String> incomming = recv_msgs();
     for (int i = 0; i < incomming.size(); i++) {
         if (incomming[i].startsWith(String("BLUE"))) {

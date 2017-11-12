@@ -54,7 +54,7 @@ void handle_msgs() {
     return;
 }
 
-void send_msg(char* msg) {
+void send_msg(String msg) {
     interconnect.outbox.push_back(msg);
 }
 
