@@ -33,9 +33,13 @@ void setup() {
     ctrlr.add(&LEDs);
     ctrlr.add(&Network);
     ctrlr.add(&DeviceI2C);
+
+    Serial.begin(9600); //DEBUGGING
+
 }
 
 void loop() {
+    Serial.println("HIHIHIHIH");
     ctrlr.run();
     //send_msg("BLUE");
     multicast("BLUE");
