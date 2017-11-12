@@ -41,10 +41,10 @@ void setup() {
 void loop() {
     Serial.println("HIHIHIHIH");
     ctrlr.run();
-    send_msg("BLUE");
-    //multicast("BLUE");
+    multicast("BLUE");
     std::vector<String> incomming = recv_msgs();
     for (int i = 0; i < incomming.size(); i++) {
+        Serial.println(incomming[i]);
         if (incomming[i].startsWith(String("BLUE"))) {
             frame.SetColor(0,0,255);
         }
