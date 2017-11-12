@@ -34,13 +34,27 @@ void multicast(String msg) {
 }
 
 void handle_msgs() {
-    //Get new messages from other nodes
-    if (Serial1.available()){
-        String msg = Serial1.readString();
+    //Get new messages from other 
+    char str[6];
+    if (Serial1.available()) {
+        int i=0;
+        delay(100); //allows all serial sent to be received together
+        while(Serial1.available() && i<6) {
+            str[i++] = Serial1.read();
+        }
+        str[i++]='\0';
+
+        String msg = String(str);
         Serial.println(String(msg + ';' + String(NORTH)));
         interconnect.inbox.push_back(String(msg + ';' + String(NORTH)));
     }
-    if (Serial2.available()){
+    if (Serial2.available()) {
+        int i=0;
+        delay(100); //allows all serial sent to be received together
+        while(Serial2.available() && i<6) {
+            str[i++] = Serial2.read();
+        }
+        str[i++]='\0';
         String msg = Serial2.readString();
         Serial.println(String(msg + ';' + String(SOUTH)));
         interconnect.inbox.push_back(String(msg + ';' + String(SOUTH)));
