@@ -22,7 +22,8 @@ class LoginViewController: UIViewController {
         GrootUsersService.loginUser(byNetID: netID, andPassword: password)
         .onSuccess { (userContainer) in
             if let user = userContainer.data {
-                LoginController.shared.login(user: user, fromViewController: self)
+                LoginController.shared.currentUser = user
+                self.dismiss(animated: true, completion: nil)
             } else {
                 let reason = userContainer.error ?? "Unknown error occured. Try again later."
                 self.presentErrorViewController(withTitle: "Error", andMessage: reason, dismissParentOnCompletion: false)

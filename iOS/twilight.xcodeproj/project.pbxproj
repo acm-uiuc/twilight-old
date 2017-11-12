@@ -23,6 +23,9 @@
 		950366B61FB8068A003A22B0 /* LoginAwareTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366B51FB8068A003A22B0 /* LoginAwareTabBarController.swift */; };
 		95350ABA1FB7C7DE00B3D0F5 /* twilightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95350AB91FB7C7DE00B3D0F5 /* twilightTests.swift */; };
 		95350AC51FB7C7DE00B3D0F5 /* twilightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95350AC41FB7C7DE00B3D0F5 /* twilightUITests.swift */; };
+		958D16801FB81F910010AC66 /* SystemStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958D167F1FB81F910010AC66 /* SystemStatusViewController.swift */; };
+		958D16821FB8208A0010AC66 /* NodeDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958D16811FB8208A0010AC66 /* NodeDetailCell.swift */; };
+		958D16841FB825840010AC66 /* HairlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 958D16831FB825840010AC66 /* HairlineView.swift */; };
 		CF2B4A402368375834AED873 /* Pods_twilightUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B4FF183A4E9A63B52377B3 /* Pods_twilightUITests.framework */; };
 		EA99E36EECBD5A0352FF33C8 /* Pods_twilightTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41094F60E1768392F1FBB92 /* Pods_twilightTests.framework */; };
 /* End PBXBuildFile section */
@@ -71,6 +74,9 @@
 		95350AC01FB7C7DE00B3D0F5 /* twilightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = twilightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		95350AC41FB7C7DE00B3D0F5 /* twilightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twilightUITests.swift; sourceTree = "<group>"; };
 		95350AC61FB7C7DE00B3D0F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		958D167F1FB81F910010AC66 /* SystemStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStatusViewController.swift; sourceTree = "<group>"; };
+		958D16811FB8208A0010AC66 /* NodeDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDetailCell.swift; sourceTree = "<group>"; };
+		958D16831FB825840010AC66 /* HairlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HairlineView.swift; sourceTree = "<group>"; };
 		9687C5F96C4D7C82F8D27980 /* Pods_twilight.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_twilight.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB11A0FBFD9AB046748D48FA /* Pods-twilightTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-twilightTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-twilightTests/Pods-twilightTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D41094F60E1768392F1FBB92 /* Pods_twilightTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_twilightTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,6 +178,8 @@
 		950366951FB7DC58003A22B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				958D16811FB8208A0010AC66 /* NodeDetailCell.swift */,
+				958D16831FB825840010AC66 /* HairlineView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -188,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				950366AB1FB7FF33003A22B0 /* LoginViewController.swift */,
+				958D167F1FB81F910010AC66 /* SystemStatusViewController.swift */,
 			);
 			path = ControlViewControllers;
 			sourceTree = "<group>";
@@ -559,6 +568,8 @@
 			files = (
 				950366A01FB7DCB1003A22B0 /* GrootTwilightService.swift in Sources */,
 				9503669E1FB7DC9F003A22B0 /* GrootUsersService.swift in Sources */,
+				958D16841FB825840010AC66 /* HairlineView.swift in Sources */,
+				958D16821FB8208A0010AC66 /* NodeDetailCell.swift in Sources */,
 				950366AF1FB7FF33003A22B0 /* UIViewController.swift in Sources */,
 				9503669A1FB7DC59003A22B0 /* AppDelegate.swift in Sources */,
 				950366A41FB7E1EF003A22B0 /* GrootReturnDataContainer.swift in Sources */,
@@ -567,6 +578,7 @@
 				950366A21FB7DDDA003A22B0 /* GrootService.swift in Sources */,
 				950366B61FB8068A003A22B0 /* LoginAwareTabBarController.swift in Sources */,
 				950366AE1FB7FF33003A22B0 /* LoginViewController.swift in Sources */,
+				958D16801FB81F910010AC66 /* SystemStatusViewController.swift in Sources */,
 				9503669C1FB7DC74003A22B0 /* APISecrets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

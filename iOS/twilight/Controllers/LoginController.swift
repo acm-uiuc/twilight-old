@@ -21,19 +21,5 @@ class LoginController {
 
     }
 
-    func presentLoginViewController(ifNeeded conditional: Bool, fromViewController controller: UIViewController) {
-//        if !conditional {
-            let loginViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController")
-            controller.present(loginViewController, animated: true, completion: nil)
-            return
-//        }
-
-
-
-    }
-
-    func login(user: GrootUser, fromViewController controller: UIViewController) {
-        currentUser = user
-    }
 
 }

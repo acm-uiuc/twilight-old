@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "twilight/ViewControllers/ViewController.swift"
-            timestampString = "532151937.993589"
+            filePath = "twilight/ViewControllers/ControlViewControllers/LoginViewController.swift"
+            timestampString = "532163156.917035"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
             landmarkName = "login(sender:)"
             landmarkType = "7">
          </BreakpointContent>

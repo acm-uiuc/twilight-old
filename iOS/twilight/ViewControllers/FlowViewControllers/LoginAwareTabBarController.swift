@@ -10,10 +10,20 @@ import UIKit
 
 class LoginAwareTabBarController: UITabBarController {
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+//        observeValue(forKeyPath: <#T##String?#>, of: <#T##Any?#>, change: <#T##[NSKeyValueChangeKey : Any]?#>, context: <#T##UnsafeMutableRawPointer?#>)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        LoginController.shared.presentLoginViewController(ifNeeded: false, fromViewController: self)
+
+
+        if LoginController.shared.currentUser == nil {
+            performSegue(withIdentifier: "ShowLoginViewController", sender: nil)
+        }
     }
 
 
