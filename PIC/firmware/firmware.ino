@@ -3,6 +3,7 @@
 #include <Thread.h>
 #include "networking/networking.hpp"
 #include "led_driver/led_driver.hpp"
+#include "device_i2c/device_i2c.hpp"
 
 Thread LEDs = Thread();
 Thread Network = Thread();
@@ -36,6 +37,13 @@ void setup() {
 
 void loop() {
     ctrlr.run();
+    send_msg("BLUE");
+    std::vector<String> incomming = recv_msgs();
+    for (int i = 0; i < incomming.size(); i++) {
+        if (incomming[i].startsWith(String("BLUE"))) {
+            frame.SetColor(0,0,255);
+        }
+    }
 }
 
 
