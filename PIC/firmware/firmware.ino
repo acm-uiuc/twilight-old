@@ -39,7 +39,6 @@ void setup() {
 }
 
 void loop() {
-    Serial.println("HIHIHIHIH");
     ctrlr.run();
     multicast("BLUE");
     std::vector<String> incomming = recv_msgs();
