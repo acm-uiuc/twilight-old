@@ -40,7 +40,7 @@ void setup() {
 
 void loop() {
     ctrlr.run();
-    multicast("BLUE");
+    send_msg("BLUE");
     std::vector<String> incomming = recv_msgs();
     for (int i = 0; i < incomming.size(); i++) {
         Serial.println(incomming[i]);
