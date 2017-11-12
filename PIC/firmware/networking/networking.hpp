@@ -65,6 +65,7 @@ void send_msg(String msg) {
 std::vector<String> recv_msgs() {
     std::vector<String> msgs = interconnect.inbox;
     interconnect.inbox.clear();
+    Serial.println(interconnect.inbox.size());
     return msgs;
 }
 
