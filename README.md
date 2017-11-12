@@ -1,4 +1,4 @@
-# merch
+# Twilight
 Root repo for twilight
 
 ## Overview 
@@ -16,7 +16,7 @@ Root repo for twilight
 
 Make sure you have Python and pip installed before starting 
 
-There are a couple components of the Merch. To get all of them we use a tool called repo 
+There are a couple components of the twilight. To get all of them we use a tool called repo 
 
 1. Install repo - https://android.googlesource.com/tools/repo/
 
@@ -30,7 +30,7 @@ There are a couple components of the Merch. To get all of them we use a tool cal
     sudo apt install repo
 
     ```
-2. Make a directory to house your merch work
+2. Make a directory to house your twilight work
     ```sh
     mkdir merch
     ```
