@@ -1,3 +1,0 @@
-#!/bin/bash
-
-sudo avrdude -p atmega2560 -C ~/avrdude_gpio.conf -c pi_1 -v -U flash:w:$1:i

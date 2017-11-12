@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+	<remote name="origin" fetch="ssh://git@github.com/acm-uiuc/"  />
+
+	<default remote="origin" revision="master" />
+  
+	<project path="." name="twilight" />
+	<project path="embedded" name="twilight-embedded" />
+	<project path="hardware" name="twilight-hardware" />
+    <project path="border-router" name="twilight-hardware" />
+	<project path="ios" name="twilight-ios" />
+
+</manifest>
