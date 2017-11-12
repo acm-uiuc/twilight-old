@@ -40,12 +40,12 @@ void setup() {
 
 void loop() {
     ctrlr.run();
-    send_msg("RED");
+    send_msg("GREEN");
     std::vector<String> incomming = recv_msgs();
     for (int i = 0; i < incomming.size(); i++) {
         Serial.println(incomming[i]);
-        if (incomming[i].startsWith(String("RED"))) {
-            frame.SetColor(255,0,0);
+        if (incomming[i].startsWith(String("GREEN"))) {
+            frame.SetColor(0,255,0);
         }
     }
 }
