@@ -1,6 +1,0 @@
-framework module Pods_twilightUITests {
-  umbrella header "Pods-twilightUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}

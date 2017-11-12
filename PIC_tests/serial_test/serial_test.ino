@@ -55,7 +55,6 @@ void save_config() {
 uint8_t blink_rate;
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
   Serial.begin(9600);
   Serial1.begin(9600);
   Serial2.begin(9600);
