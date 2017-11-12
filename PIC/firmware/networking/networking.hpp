@@ -22,11 +22,13 @@ typedef struct NetworkExchange_struct {
 NetworkExchange interconnect = NetworkExchange();
 
 void setup_networking() {
+    Serial.begin(9600); //DEBUGGING
     Serial1.begin(9600); //NORTHBOUND
     Serial2.begin(9600); //SOUTHBOUND
 }
 
 void multicast(String msg) {
+    Serial.println(String(msg + ';' + String(SELF)));
     Serial1.print(msg);
     Serial2.print(msg);
 }
@@ -35,11 +37,13 @@ void handle_msgs() {
     //Get new messages from other nodes
     if (Serial1.available()){
         String msg = Serial1.readString();
+        Serial.println(String(msg + ';' + String(NORTH)));
         interconnect.inbox.push_back(String(msg + ';' + String(NORTH)));
     }
     if (Serial2.available()){
         String msg = Serial2.readString();
-        interconnect.inbox.push_back(String(msg + ';' + String(NORTH)));
+        Serial.println(String(msg + ';' + String(SOUTH)));
+        interconnect.inbox.push_back(String(msg + ';' + String(SOUTH)));
     }
 
     //Send messages in outbox
