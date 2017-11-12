@@ -9,7 +9,7 @@
 
 
 void setup_networking();
-void handle_msgs();
+void handle_network_msgs();
 void multicast(String msg);
 void send_msg(String msg);
 std::vector<String> recv_msgs();
@@ -33,7 +33,7 @@ void multicast(String msg) {
     Serial2.print(msg);
 }
 
-void handle_msgs() {
+void handle_network_msgs() {
     //Get new messages from other nodes
     Serial.println("Checking for messages");
     if (Serial1.available()) {

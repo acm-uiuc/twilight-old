@@ -19,10 +19,10 @@ void setup() {
     LEDs.onRun(update_frame);
 
     //Setup Network Thread
-    /*setup_networking();
+    setup_networking();
     Network.enabled = true;
     Network.setInterval(10);
-    Network.onRun(handle_network_msgs);*/
+    Network.onRun(handle_network_msgs);
     
     //DeviceI2C
     /*setup_i2c();
