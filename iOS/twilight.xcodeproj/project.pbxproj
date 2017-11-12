@@ -10,12 +10,17 @@
 		108FB5586822FF3ADCFE1116 /* Pods_twilight.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9687C5F96C4D7C82F8D27980 /* Pods_twilight.framework */; };
 		950366961FB7DC59003A22B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9503668D1FB7DC58003A22B0 /* LaunchScreen.storyboard */; };
 		950366971FB7DC59003A22B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9503668E1FB7DC58003A22B0 /* Main.storyboard */; };
-		950366981FB7DC59003A22B0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366911FB7DC58003A22B0 /* ViewController.swift */; };
 		9503669A1FB7DC59003A22B0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366941FB7DC58003A22B0 /* AppDelegate.swift */; };
 		9503669C1FB7DC74003A22B0 /* APISecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503669B1FB7DC74003A22B0 /* APISecrets.swift */; };
 		9503669E1FB7DC9F003A22B0 /* GrootUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503669D1FB7DC9F003A22B0 /* GrootUsersService.swift */; };
 		950366A01FB7DCB1003A22B0 /* GrootTwilightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9503669F1FB7DCB1003A22B0 /* GrootTwilightService.swift */; };
 		950366A21FB7DDDA003A22B0 /* GrootService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366A11FB7DDDA003A22B0 /* GrootService.swift */; };
+		950366A41FB7E1EF003A22B0 /* GrootReturnDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366A31FB7E1EF003A22B0 /* GrootReturnDataContainer.swift */; };
+		950366A61FB7E2D7003A22B0 /* GrootUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366A51FB7E2D7003A22B0 /* GrootUser.swift */; };
+		950366AE1FB7FF33003A22B0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366AB1FB7FF33003A22B0 /* LoginViewController.swift */; };
+		950366AF1FB7FF33003A22B0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366AD1FB7FF33003A22B0 /* UIViewController.swift */; };
+		950366B41FB802D0003A22B0 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366B31FB802D0003A22B0 /* LoginController.swift */; };
+		950366B61FB8068A003A22B0 /* LoginAwareTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950366B51FB8068A003A22B0 /* LoginAwareTabBarController.swift */; };
 		95350ABA1FB7C7DE00B3D0F5 /* twilightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95350AB91FB7C7DE00B3D0F5 /* twilightTests.swift */; };
 		95350AC51FB7C7DE00B3D0F5 /* twilightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95350AC41FB7C7DE00B3D0F5 /* twilightUITests.swift */; };
 		CF2B4A402368375834AED873 /* Pods_twilightUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34B4FF183A4E9A63B52377B3 /* Pods_twilightUITests.framework */; };
@@ -48,12 +53,17 @@
 		9503668A1FB7DB9D003A22B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9503668D1FB7DC58003A22B0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9503668E1FB7DC58003A22B0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		950366911FB7DC58003A22B0 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		950366941FB7DC58003A22B0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9503669B1FB7DC74003A22B0 /* APISecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APISecrets.swift; sourceTree = "<group>"; };
 		9503669D1FB7DC9F003A22B0 /* GrootUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootUsersService.swift; sourceTree = "<group>"; };
 		9503669F1FB7DCB1003A22B0 /* GrootTwilightService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootTwilightService.swift; sourceTree = "<group>"; };
 		950366A11FB7DDDA003A22B0 /* GrootService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootService.swift; sourceTree = "<group>"; };
+		950366A31FB7E1EF003A22B0 /* GrootReturnDataContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootReturnDataContainer.swift; sourceTree = "<group>"; };
+		950366A51FB7E2D7003A22B0 /* GrootUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrootUser.swift; sourceTree = "<group>"; };
+		950366AB1FB7FF33003A22B0 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		950366AD1FB7FF33003A22B0 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		950366B31FB802D0003A22B0 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		950366B51FB8068A003A22B0 /* LoginAwareTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAwareTabBarController.swift; sourceTree = "<group>"; };
 		95350AA11FB7C7DE00B3D0F5 /* twilight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = twilight.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		95350AB51FB7C7DE00B3D0F5 /* twilightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = twilightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		95350AB91FB7C7DE00B3D0F5 /* twilightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twilightTests.swift; sourceTree = "<group>"; };
@@ -109,6 +119,7 @@
 		9503668B1FB7DC58003A22B0 /* twilight */ = {
 			isa = PBXGroup;
 			children = (
+				950366B21FB80293003A22B0 /* Controllers */,
 				9503668C1FB7DC58003A22B0 /* Storyboards */,
 				9503668F1FB7DC58003A22B0 /* Models */,
 				950366901FB7DC58003A22B0 /* ViewControllers */,
@@ -131,6 +142,8 @@
 		9503668F1FB7DC58003A22B0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				950366A31FB7E1EF003A22B0 /* GrootReturnDataContainer.swift */,
+				950366A51FB7E2D7003A22B0 /* GrootUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -138,7 +151,9 @@
 		950366901FB7DC58003A22B0 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				950366911FB7DC58003A22B0 /* ViewController.swift */,
+				950366AA1FB7FF33003A22B0 /* ControlViewControllers */,
+				950366AC1FB7FF33003A22B0 /* Extensions */,
+				950366A91FB7FF33003A22B0 /* FlowViewControllers */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -159,6 +174,38 @@
 			children = (
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		950366A91FB7FF33003A22B0 /* FlowViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				950366B51FB8068A003A22B0 /* LoginAwareTabBarController.swift */,
+			);
+			path = FlowViewControllers;
+			sourceTree = "<group>";
+		};
+		950366AA1FB7FF33003A22B0 /* ControlViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				950366AB1FB7FF33003A22B0 /* LoginViewController.swift */,
+			);
+			path = ControlViewControllers;
+			sourceTree = "<group>";
+		};
+		950366AC1FB7FF33003A22B0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				950366AD1FB7FF33003A22B0 /* UIViewController.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		950366B21FB80293003A22B0 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				950366B31FB802D0003A22B0 /* LoginController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		95350A981FB7C7DE00B3D0F5 = {
@@ -512,10 +559,15 @@
 			files = (
 				950366A01FB7DCB1003A22B0 /* GrootTwilightService.swift in Sources */,
 				9503669E1FB7DC9F003A22B0 /* GrootUsersService.swift in Sources */,
+				950366AF1FB7FF33003A22B0 /* UIViewController.swift in Sources */,
 				9503669A1FB7DC59003A22B0 /* AppDelegate.swift in Sources */,
+				950366A41FB7E1EF003A22B0 /* GrootReturnDataContainer.swift in Sources */,
+				950366B41FB802D0003A22B0 /* LoginController.swift in Sources */,
+				950366A61FB7E2D7003A22B0 /* GrootUser.swift in Sources */,
 				950366A21FB7DDDA003A22B0 /* GrootService.swift in Sources */,
+				950366B61FB8068A003A22B0 /* LoginAwareTabBarController.swift in Sources */,
+				950366AE1FB7FF33003A22B0 /* LoginViewController.swift in Sources */,
 				9503669C1FB7DC74003A22B0 /* APISecrets.swift in Sources */,
-				950366981FB7DC59003A22B0 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,7 +716,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = twilight/Info.plist;
+				DEVELOPMENT_TEAM = P3FJ87836G;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = acm.twilight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -679,7 +732,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = twilight/Info.plist;
+				DEVELOPMENT_TEAM = P3FJ87836G;
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = acm.twilight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
