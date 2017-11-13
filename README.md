@@ -32,7 +32,7 @@ There are a couple components of the twilight. To get all of them we use a tool 
     ```
 2. Make a directory to house your twilight work
     ```sh
-    mkdir merch
+    mkdir twilight
     ```
     
 3. Within this directory run the following command to start managing the projects
